@@ -14,10 +14,14 @@ namespace Customizable.Menu.TagHelpers
             List<string> words = TransformText.Clean().Split(' ').ToList();
 
             foreach (string word in words)
-                result += $"<span class='cameltag-start'>"
-                    + $"{word.Trim()[..1]}</span>"
-                    + $"<span class='cameltag-end'>"
-                    + $"{word.Trim()[1..]}</span>";
+                try
+                {
+                    result += $"<span class='cameltag-start'>"
+                        + $"{word.Trim()[..1]}</span>"
+                        + $"<span class='cameltag-end'>"
+                        + $"{word.Trim()[1..]}</span>";
+                }
+                catch (ArgumentOutOfRangeException) { }
 
             output.TagName = null;
             output.PostContent.AppendHtml(result);

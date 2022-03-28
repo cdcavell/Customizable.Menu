@@ -98,10 +98,11 @@ namespace ClassLibrary.Mvc.Http
         {
             CookieOptions option = new()
             {
-               HttpOnly = true,
-               Secure = true,
-               SameSite = SameSiteMode.Strict,
-               Expires = DateTime.MinValue,
+                IsEssential = true,
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Path = "/"
             };
 
             return option;

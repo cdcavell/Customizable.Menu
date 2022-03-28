@@ -33,9 +33,3 @@ _To Update:_
 ```
 $ dotnet ef migrations add Update --context ApplicationDbContext --output-dir Migrations
 ```
-
-<hr />
-
-| Build | Date | Description |
-|-------|------|-------------|
-| 0.0.0.1 | 3/28/2022 | __Initial Development__ |

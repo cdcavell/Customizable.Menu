@@ -8,10 +8,15 @@ namespace ClassLibrary.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        private readonly ILogger _logger;
+
         public ApplicationDbContext(
+            ILogger<ApplicationDbContext> logger,
             DbContextOptions<ApplicationDbContext> options
         ) : base(options)
         {
+            _logger = logger;
+            IEnumerableExtentions.Logger = logger;
         }
 
         public DbSet<AuditHistory> AuditHistory => Set<AuditHistory>();
@@ -26,6 +31,9 @@ namespace ClassLibrary.Data
 
             base.OnModelCreating(builder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(message => _logger.LogDebug("{message}", message));
 
         public bool HasUnsavedChanges()
         {
