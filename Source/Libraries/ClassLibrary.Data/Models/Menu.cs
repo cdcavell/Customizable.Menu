@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClassLibrary.Data.Models
@@ -54,7 +55,9 @@ namespace ClassLibrary.Data.Models
 
         public static List<Menu> List(ApplicationDbContext dbContext)
         {
-            return dbContext.Menu.OrderBy(x => x.Ordinal).ToList();
+            return dbContext.Menu.AsNoTracking()
+                .OrderBy(x => x.Ordinal)
+                .ToList();
         }
 
         #endregion
