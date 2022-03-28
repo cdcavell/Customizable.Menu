@@ -4,7 +4,7 @@ using System;
 namespace Customizable.Menu.TagHelpers
 {
     [HtmlTargetElement("cameltag")]
-    public class SpanTransformTagHelper : TagHelper
+    public class CamelTagHelper : TagHelper
     {
         public string TransformText { get; set; } = string.Empty;
 
