@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="author" content="Christopher D. Cavell">
+
+    <meta name="description" content="Customizable Menu">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+
+    <title>@ViewBag.MenuTitle</title>
+    <base href="/" />
+
+    <link rel="icon" type="image/x-icon" href="~/img/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.ico" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i&amp;display=swap" nonce="@ViewBag.StyleNonce" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/bootstrap-5.1.3-dist/css/bootstrap.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/fontawesome-free-5.15.4-web/css/all.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/bootstrap-custom.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/ionicons.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/tiny-slider.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/lity.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/simplebar.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/jquery.mb.YTPlayer.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/main.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/lib/Kitzu/css/colors/main-darkgreen.css" id="color-scheme" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="~/css/site.min.css" asp-append-version="true" nonce="@ViewBag.StyleNonce" />
+</head>
+<body class="theme-dark">
+    <!-- Preloader -->
+    <div class="preloader">
+      <div class="preloader-block">
+        <div class="preloader-icon"><span class="loading-dot loading-dot-1"></span><span class="loading-dot loading-dot-2"></span><span class="loading-dot loading-dot-3"></span></div>
+      </div>
+    </div>
+    <div id="overlay-effect"></div>
+    <partial name="_Navbar" />
+    <section class="home-area element-cover-bg video-variant bkg-img" id="home">
+    <!-- Content -->
+    @RenderBody()
+    <div class="fixed-wrapper">
+    <partial name="_LeftMenu" />
+    <partial name="_Search" />
+    </div>
+    </section>
+    <partial name="_About" />
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm", enctype = "application/x-www-form-urlencoded" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+
+    <script type="text/javascript" src="~/lib/jquery-3.6.0.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+
+    <script type="text/javascript" src="~/lib/Kitzu/js/imagesloaded.pkgd.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/isotope.pkgd.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/animatedModal.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/tiny-slider.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/lity.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/simplebar.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/jquery.mb.YTPlayer.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    <script type="text/javascript" src="~/lib/Kitzu/js/main.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+
+    <script type="text/javascript" src="~/js/site.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿<!-- Menu list-->
+<div class="fixed-block block-left">
+<ul class="list-unstyled menu-list">
+    @foreach (ClassLibrary.Data.Models.Menu menuItem in ViewBag.MenuItems)
+    {
+        <li><a href="/Home/Index/@menuItem.Guid"><span class="single-item">@menuItem.Description</span></a></li>
+    }
+</ul>
+</div>

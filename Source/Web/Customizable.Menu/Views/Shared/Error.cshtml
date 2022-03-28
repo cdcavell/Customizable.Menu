@@ -1,0 +1,61 @@
+﻿@model ClassLibrary.Mvc.Models.Home.ErrorViewModel
+@{
+    var StatusCode = Model?.StatusCode;
+    var status = Model?.StatusMessage;
+    var requestId = Model?.RequestId;
+    var exception = (AppSettings.IsDevelopment()) ? Model?.Exception : null;
+}
+
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-content-center">
+        <div class="col-12 col-lg-8 home-content text-center">
+
+            <div class="body-content">
+
+                <div class="shadow alert alert-danger text-start mb-1" role="alert">
+                    <strong>Status Code: @StatusCode.ToString() System Error</strong>
+                    @if (status != null)
+                    {
+                        <br />@Html.Raw(status)
+                    }
+                </div>
+                <p class="request-id text-start ml-2 mt-0">
+                    @if (requestId != null)
+                    {
+                        <span>Request Id: <code>@requestId</code></span>
+                    }
+                </p>
+
+                @if (exception != null)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+
+                    <p class="">
+                        <ul class="">
+                            <li><b>Exception Message:</b> @exception.Message</li>
+                            <li><b>Exception Source:</b> @exception.Source</li>
+                            <li><b>Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.StackTrace</span></li>
+                        </ul>
+
+                        @if (exception.InnerException != null)
+                        {
+                            <ul class="">
+                                <li><b>Inner Exception Message:</b> @exception.InnerException.Message</li>
+                                <li><b>Inner Exception Source:</b> @exception.InnerException.Source</li>
+                                <li><b>Inner Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.InnerException.StackTrace</span></li>
+                            </ul>
+                        }
+                    </p>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
