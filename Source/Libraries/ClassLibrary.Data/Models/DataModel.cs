@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 
 namespace ClassLibrary.Data.Models
 {
@@ -23,6 +24,32 @@ namespace ClassLibrary.Data.Models
 
         public virtual void AddUpdate(ApplicationDbContext dbContext)
         {
+            var dbContextTransaction = dbContext.Database.CurrentTransaction;
+            if (dbContextTransaction == null)
+            {
+                dbContextTransaction = dbContext.Database.BeginTransaction();
+                using (dbContextTransaction)
+                {
+                    try
+                    {
+                        InternalAddUpdate(dbContext);
+                        dbContextTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                InternalAddUpdate(dbContext);
+            }
+        }
+
+        private void InternalAddUpdate(ApplicationDbContext dbContext)
+        {
             if (this.IsNew)
             {
                 this.Guid = Guid.NewGuid();
@@ -31,17 +58,46 @@ namespace ClassLibrary.Data.Models
             else
                 dbContext.Update<DataModel<T>>(this);
 
-            dbContext.SaveChanges();
+            if (dbContext.HasUnsavedChanges())
+            {
+                dbContext.SaveChanges();
+            }
         }
 
         public virtual void Delete(ApplicationDbContext dbContext)
         {
             if (!this.IsNew)
             {
-                dbContext.Attach<DataModel<T>>(this);
-                dbContext.Remove<DataModel<T>>(this);
-                dbContext.SaveChanges();
+                var dbContextTransaction = dbContext.Database.CurrentTransaction;
+                if (dbContextTransaction == null)
+                {
+                    dbContextTransaction = dbContext.Database.BeginTransaction();
+                    using (dbContextTransaction)
+                    {
+                        try
+                        {
+                            InternalDelete(dbContext);
+                            dbContextTransaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            dbContextTransaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+                else
+                {
+                    InternalDelete(dbContext);
+                }
             }
+        }
+
+        private void InternalDelete(ApplicationDbContext dbContext)
+        {
+            dbContext.Attach<DataModel<T>>(this);
+            dbContext.Remove<DataModel<T>>(this);
+            dbContext.SaveChanges();
         }
 
         public virtual bool Equals(DataModel<T> obj)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Transactions;
 
 namespace ClassLibrary.Data.Models
 {
@@ -15,6 +16,12 @@ namespace ClassLibrary.Data.Models
         [MinLength(3, ErrorMessage = "Description value must contain at least 3 characters.")]
         [MaxLength(20, ErrorMessage = "Description value cannot exceed 20 characters.")]
         public string Description { get; set; } = String.Empty;
+
+        #endregion
+
+        #region relationships
+
+        public List<Site> Sites { get; set; } = new();
 
         #endregion
 
@@ -55,9 +62,16 @@ namespace ClassLibrary.Data.Models
 
         public static List<Menu> List(ApplicationDbContext dbContext)
         {
-            return dbContext.Menu.AsNoTracking()
-                .OrderBy(x => x.Ordinal)
-                .ToList();
+            List<Menu> queryResult = new();
+            if (dbContext.Database.CanConnect())
+            {
+                queryResult = dbContext.Menu.AsNoTracking()
+                    .Include("Sites")
+                    .OrderBy(x => x.Ordinal)
+                    .ToList();
+            }
+
+            return queryResult;
         }
 
         #endregion

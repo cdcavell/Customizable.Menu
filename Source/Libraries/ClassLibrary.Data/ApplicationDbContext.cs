@@ -3,12 +3,62 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Transactions;
 
 namespace ClassLibrary.Data
 {
     public class ApplicationDbContext : DbContext
     {
         private readonly ILogger _logger;
+
+        public TransactionScope ReadUncommittedScope
+        { 
+            get 
+            {
+                return new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                });
+            } 
+        }
+
+        public TransactionScope ReadCommittedScope
+        {
+            get
+            {
+                return new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
+                });
+            }
+        }
+
+        public TransactionScope SerializableScope
+        {
+            get
+            {
+                return new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.Serializable
+                });
+            }
+        }
+
+        public TransactionScope RepeatableReadScope
+        {
+            get
+            {
+                return new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead
+                });
+            }
+        }
 
         public ApplicationDbContext(
             ILogger<ApplicationDbContext> logger,
@@ -22,6 +72,7 @@ namespace ClassLibrary.Data
         public DbSet<AuditHistory> AuditHistory => Set<AuditHistory>();
         public DbSet<Configuration> Configuration => Set<Configuration>();
         public DbSet<Menu> Menu => Set<Menu>();
+        public DbSet<Site> Site => Set<Site>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -203,18 +254,89 @@ namespace ClassLibrary.Data
             if (scopeFactory != null)
                 using (var serviceScope = scopeFactory.CreateScope())
                 {
-                    serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
-
                     var configurationContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     if (configurationContext != null)
                     {
+                        foreach (string migration in configurationContext.Database.GetPendingMigrations())
+                            appliedMigrations.Add($"Applied Migration: {migration}");
+
                         configurationContext.Database.Migrate();
 
                         if (!configurationContext.Configuration.Any())
                             new Configuration().AddUpdate(configurationContext);
+#if DEBUG
+                        //TODO: For Development Only
+                        if (!configurationContext.Menu.Any())
+                        {
+                            using (var dbContextTransaction = configurationContext.Database.BeginTransaction())
+                            {
+                                try
+                                {
+                                    new Menu
+                                    {
+                                        Description = "Menu Item 1",
+                                        Sites = new List<Site>()
+                                        {
+                                            new Site { Description = "Web Site 1" },
+                                            new Site { Description = "Web Site 2" },
+                                            new Site { Description = "Web Site 3" }
+                                        }
+                                    }.AddUpdate(configurationContext);
 
-                        foreach (string migration in configurationContext.Database.GetAppliedMigrations())
-                            appliedMigrations.Add($"Applied Migration: {migration}");
+                                    new Menu
+                                    {
+                                        Description = "Menu Item 2",
+                                        Sites = new List<Site>()
+                                        {
+                                            new Site { Description = "Web Site 1" },
+                                            new Site { Description = "Web Site 2" },
+                                            new Site { Description = "Web Site 3" }
+                                        }
+                                    }.AddUpdate(configurationContext);
+
+                                    new Menu
+                                    {
+                                        Description = "Menu Item 3",
+                                        Sites = new List<Site>()
+                                        {
+                                            new Site { Description = "Web Site 1" },
+                                            new Site { Description = "Web Site 2" },
+                                            new Site { Description = "Web Site 3" }
+                                        }
+                                    }.AddUpdate(configurationContext);
+
+                                    new Menu
+                                    {
+                                        Description = "Menu Item 4",
+                                        Sites = new List<Site>()
+                                        {
+                                            new Site { Description = "Web Site 1" },
+                                            new Site { Description = "Web Site 2" },
+                                            new Site { Description = "Web Site 3" }
+                                        }
+                                    }.AddUpdate(configurationContext);
+
+                                    new Menu
+                                    {
+                                        Description = "Menu Item 5",
+                                        Sites = new List<Site>()
+                                        {
+                                            new Site { Description = "Web Site 1" },
+                                            new Site { Description = "Web Site 2" },
+                                            new Site { Description = "Web Site 3" }
+                                        }
+                                    }.AddUpdate(configurationContext);
+
+                                    dbContextTransaction.Commit();
+                                }
+                                catch (Exception)
+                                {
+                                    dbContextTransaction.Rollback();
+                                    throw;
+                                }
+                            }
+                        }
+#endif
                     }
                 }
 

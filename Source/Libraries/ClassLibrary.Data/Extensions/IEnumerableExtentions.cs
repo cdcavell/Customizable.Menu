@@ -13,7 +13,7 @@ namespace System.Collections.Generic
         {
             List<string> messageResults = new();
 
-            foreach (var item in enumerable)
+            foreach (var item in enumerable.ToList())
             {
                 if (item != null)
                 {
@@ -22,7 +22,14 @@ namespace System.Collections.Generic
                     bool result = Convert.ToBoolean(dynamicExpression.DynamicInvoke(item));
 
                     if (result)
-                        messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {JsonConvert.SerializeObject(item)}");
+                    {
+                        string record = JsonConvert.SerializeObject(item, new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+                        messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {record}");
+                    }                   
                 }
 
                 yield return item;
@@ -42,10 +49,17 @@ namespace System.Collections.Generic
         {
             List<string> messageResults = new();
 
-            foreach (var item in enumerable)
+            foreach (var item in enumerable.ToList())
             {
                 if (item != null)
-                    messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {JsonConvert.SerializeObject(item)}");
+                {
+                    string record = JsonConvert.SerializeObject(item, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+
+                    messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {record}");
+                }
 
                 yield return item;
             }
