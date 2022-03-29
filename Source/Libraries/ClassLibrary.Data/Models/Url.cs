@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClassLibrary.Data.Models
 {
-    public enum Environment
+    public enum EnvironmentTypes
     {
         Development,
         Staging,
@@ -16,9 +16,10 @@ namespace ClassLibrary.Data.Models
     {
         #region properties
 
-        [DataType(DataType.Text)]
-        public string Environment { get; set; } = string.Empty;
+        [Required]
+        public EnvironmentTypes Environment { get; set; }
 
+        [Required]
         [DataType(DataType.Text)]
         [MinLength(1, ErrorMessage = "Link value must contain at least 1 character.")]
         [MaxLength(256, ErrorMessage = "Link value cannot exceed 256 characters.")]

@@ -9,7 +9,7 @@ namespace System.Collections.Generic
     {
         public static ILogger? Logger { get; set; }
 
-        public static IEnumerable<T> LogRecord<T>(this IEnumerable<T> enumerable, Expression<Func<T, bool>> expression)
+        public static IEnumerable<T> LogRecords<T>(this IEnumerable<T> enumerable, Expression<Func<T, bool>> expression)
         {
             List<string> messageResults = new();
 
@@ -25,7 +25,8 @@ namespace System.Collections.Generic
                     {
                         string record = JsonConvert.SerializeObject(item, new JsonSerializerSettings()
                         {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            Formatting = Formatting.Indented
                         });
 
                         messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {record}");
@@ -37,7 +38,7 @@ namespace System.Collections.Generic
 
             if (Logger != null)
             {
-                string message = $"LogRecord Result(s):{AsciiCodes.CRLF}{AsciiCodes.CRLF}";
+                string message = $"LogRecords({expression}) Result(s):{AsciiCodes.CRLF}{AsciiCodes.CRLF}";
                 foreach (string item in messageResults)
                     message += $"{item}{AsciiCodes.CRLF}";
 
@@ -55,7 +56,8 @@ namespace System.Collections.Generic
                 {
                     string record = JsonConvert.SerializeObject(item, new JsonSerializerSettings()
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Formatting = Formatting.Indented
                     });
 
                     messageResults.Add($"Entity: {{\"{item.GetType().Name}\"}} Record: {record}");
@@ -66,7 +68,7 @@ namespace System.Collections.Generic
 
             if (Logger != null)
             {
-                string message = $"LogAllRecords Result(s):{AsciiCodes.CRLF}{AsciiCodes.CRLF}";
+                string message = $"LogAllRecords() Result(s):{AsciiCodes.CRLF}{AsciiCodes.CRLF}";
                 foreach (string item in messageResults)
                     message += $"{item}{AsciiCodes.CRLF}";
 
