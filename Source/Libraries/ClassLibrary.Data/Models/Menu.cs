@@ -67,6 +67,7 @@ namespace ClassLibrary.Data.Models
             {
                 queryResult = dbContext.Menu.AsNoTracking()
                     .Include("Sites")
+                    .Include("Sites.Urls")
                     .OrderBy(x => x.Ordinal)
                     .ToList();
             }

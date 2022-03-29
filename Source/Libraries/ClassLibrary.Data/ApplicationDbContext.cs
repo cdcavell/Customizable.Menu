@@ -12,54 +12,6 @@ namespace ClassLibrary.Data
     {
         private readonly ILogger _logger;
 
-        public TransactionScope ReadUncommittedScope
-        { 
-            get 
-            {
-                return new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions
-                {
-                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
-                });
-            } 
-        }
-
-        public TransactionScope ReadCommittedScope
-        {
-            get
-            {
-                return new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions
-                {
-                    IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
-                });
-            }
-        }
-
-        public TransactionScope SerializableScope
-        {
-            get
-            {
-                return new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions
-                {
-                    IsolationLevel = System.Transactions.IsolationLevel.Serializable
-                });
-            }
-        }
-
-        public TransactionScope RepeatableReadScope
-        {
-            get
-            {
-                return new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions
-                {
-                    IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead
-                });
-            }
-        }
-
         public ApplicationDbContext(
             ILogger<ApplicationDbContext> logger,
             DbContextOptions<ApplicationDbContext> options
@@ -73,6 +25,7 @@ namespace ClassLibrary.Data
         public DbSet<Configuration> Configuration => Set<Configuration>();
         public DbSet<Menu> Menu => Set<Menu>();
         public DbSet<Site> Site => Set<Site>();
+        public DbSet<Url> Url => Set<Url>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

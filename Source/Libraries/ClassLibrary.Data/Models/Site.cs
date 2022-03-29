@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClassLibrary.Data.Models
 {
+    [Table("Site")]
     public class Site : DataModel<Site>
     {
         #region properties
@@ -22,6 +19,8 @@ namespace ClassLibrary.Data.Models
 
         public Guid MenuId { get; set; }
         public Menu Menu { get; set; } = new();
+
+        public List<Url> Urls { get; set; } = new();
 
         #endregion
     }
