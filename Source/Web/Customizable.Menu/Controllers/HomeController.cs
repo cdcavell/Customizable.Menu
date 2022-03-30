@@ -20,9 +20,7 @@ namespace Customizable.Menu.Controllers
         public IActionResult Index(Guid Id)
         {
             this.LoadMenu(Id);
-
-            byte[] encryptionKey = _dbContext.Configuration.Select(x => x.EncryptionKey).FirstOrDefault()!.ToArray();
-            ApplicationCookie cookie = new(_httpContextAccessor, encryptionKey);
+            ApplicationCookie cookie = new(_httpContextAccessor, _encryptionKey);
             cookie.SetValue("session", "menuId", ViewBag.MenuId.ToString());
 
             return View();

@@ -34,7 +34,10 @@ namespace Customizable.Menu
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     _appSettings.ConnectionStrings.ApplicationDbConnection,
-                    sql => sql.MigrationsAssembly(migrationsAssembly)
+                    sql => {
+                        sql.MigrationsAssembly(migrationsAssembly);
+                        sql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    }
                 ));
 
             // Enable HSTS and HTTPS Redirect

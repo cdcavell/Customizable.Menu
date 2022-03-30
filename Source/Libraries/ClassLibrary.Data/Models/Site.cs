@@ -21,9 +21,11 @@ namespace ClassLibrary.Data.Models
 
         #region relationships
 
-        public Guid MenuId { get; set; }
+        public Guid MenuGuid { get; set; }
+        [ForeignKey(nameof(MenuGuid))]
         public Menu Menu { get; set; } = new();
 
+        [InverseProperty(nameof(Url.Site))]
         public List<Url> Urls { get; set; } = new();
 
         #endregion
@@ -61,7 +63,11 @@ namespace ClassLibrary.Data.Models
             if (this.Ordinal < 1)
             {
                 short maxOrdinal = 0;
-                if (dbContext.Site.Where(x => x.MenuId == this.MenuId).Any()) maxOrdinal = dbContext.Site.Where(x => x.MenuId == this.MenuId).Max(x => x.Ordinal);
+                if (dbContext.Site.Where(x => x.MenuGuid == this.MenuGuid).Any()) 
+                    maxOrdinal = dbContext.Site
+                        .Where(x => x.MenuGuid == this.MenuGuid)
+                        .Max(x => x.Ordinal);
+
                 this.Ordinal = Convert.ToInt16(maxOrdinal + 1);
             }
 
@@ -74,7 +80,7 @@ namespace ClassLibrary.Data.Models
         public override void Delete(ApplicationDbContext dbContext)
         {
             short ordinal = this.Ordinal;
-            Guid guid = this.Guid;
+            Guid guid = this.MenuGuid;
 
             var dbContextTransaction = dbContext.Database.CurrentTransaction;
             if (dbContextTransaction == null)
@@ -106,9 +112,9 @@ namespace ClassLibrary.Data.Models
 
         #region staic methods
 
-        private static void InternalReorg(ApplicationDbContext dbContext, Guid guid, short ordinal)
+        private static void InternalReorg(ApplicationDbContext dbContext, Guid menuGuid, short ordinal)
         {
-            foreach (Site siteItem in dbContext.Site.Where(x => x.Guid == guid).Where(x => x.Ordinal > ordinal).ToList())
+            foreach (Site siteItem in dbContext.Site.Where(x => x.Guid == menuGuid).Where(x => x.Ordinal > ordinal).ToList())
             {
                 siteItem.Ordinal = Convert.ToInt16(siteItem.Ordinal - 1);
                 siteItem.AddUpdate(dbContext);

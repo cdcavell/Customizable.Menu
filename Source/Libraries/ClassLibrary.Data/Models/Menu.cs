@@ -24,6 +24,7 @@ namespace ClassLibrary.Data.Models
 
         #region relationships
 
+        [InverseProperty(nameof(Site.Menu))]
         public List<Site> Sites { get; set; } = new();
 
         #endregion
@@ -115,47 +116,6 @@ namespace ClassLibrary.Data.Models
                 menuItem.Ordinal = Convert.ToInt16(menuItem.Ordinal - 1);
                 menuItem.AddUpdate(dbContext);
             }
-        }
-
-        public static List<Menu> ReadOnlyList(ApplicationDbContext dbContext)
-        {
-            List<Menu> queryResult = new();
-            if (dbContext.Database.CanConnect())
-            {
-                queryResult = dbContext.Menu.AsNoTrackingWithIdentityResolution()
-                    .Include("Sites")
-                    .Include("Sites.Urls")
-                    .OrderBy(x => x.Ordinal)
-#if DEBUG
-                    //TODO: Development Only
-                    .LogRecords(x => x.Ordinal.Equals(2))
-                    .LogAllRecords()
-#endif
-                    .ToList();
-            }
-
-            return queryResult;
-        }
-
-        public static List<Menu> List(ApplicationDbContext dbContext)
-        {
-            List<Menu> queryResult = new();
-            if (dbContext.Database.CanConnect())
-            {
-                queryResult = dbContext.Menu
-                    .Include("Sites")
-                    .Include("Sites.Urls")
-                    .OrderBy(x => x.Ordinal)
-#if DEBUG
-                    //TODO: Development Only
-                    .LogRecords(x => x.Ordinal.Equals(2))
-                    .LogAllRecords()
-#endif
-
-                    .ToList();
-            }
-
-            return queryResult;
         }
 
         #endregion

@@ -29,7 +29,8 @@ namespace ClassLibrary.Data.Models
 
         #region relationships
 
-        public Guid SiteId { get; set; }
+        public Guid SiteGuid { get; set; }
+        [ForeignKey(nameof(SiteGuid))]
         public Site Site { get; set; } = new();
 
         #endregion

@@ -15,6 +15,7 @@ namespace Customizable.Menu.Controllers
         protected readonly AppSettings _appSettings;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly ApplicationDbContext _dbContext;
+        protected readonly byte[] _encryptionKey;
 
         protected ApplicationBaseController(
             ILogger<T> logger,
@@ -26,14 +27,13 @@ namespace Customizable.Menu.Controllers
             _appSettings = appSettingsService.ToObject<AppSettings>();
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
+            _encryptionKey = _dbContext.EncryptionKey();
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-
-            byte[] encryptionKey = _dbContext.Configuration.Select(x => x.EncryptionKey).FirstOrDefault()!.ToArray();
-            ApplicationCookie cookie = new(_httpContextAccessor, encryptionKey);
+            ApplicationCookie cookie = new(_httpContextAccessor, _encryptionKey);
 
             Guid menuId = Guid.Empty;
             try
@@ -48,14 +48,20 @@ namespace Customizable.Menu.Controllers
 
         protected void LoadMenu(Guid menuId)
         {
-            List<ClassLibrary.Data.Models.Menu> menuItems = ClassLibrary.Data.Models.Menu.List(_dbContext);
+            List<ClassLibrary.Data.Models.Menu> menuItems = _dbContext
+                .SortedMenuListNoTracking().ToList();
 
             if (menuId == Guid.Empty)
-                menuId = menuItems.Select(x => x.Guid).FirstOrDefault();
+                menuId = menuItems.OrderBy(menu => menu.Ordinal)
+                    .Select(menu => menu.Guid).FirstOrDefault();
 
             ViewBag.MenuId = menuId;
-            ViewBag.MenuTitle = menuItems.Where(x => x.Guid == menuId).Select(x => x.Description).FirstOrDefault();
-            ViewBag.MenuItems = menuItems.Where(x => x.Guid != menuId).ToList();
+            ViewBag.MenuTitle = menuItems
+                .Where(menu => menu.Guid == menuId)
+                .OrderBy(menu => menu.Ordinal)
+                .Select(menu => menu.Description)
+                .FirstOrDefault();
+            ViewBag.MenuItems = menuItems.Where(menu => menu.Guid != menuId).ToList();
 
             _logger.LogDebug("Selected Menu Id: {menuId}", menuId);
         }
