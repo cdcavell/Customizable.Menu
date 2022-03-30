@@ -41,7 +41,6 @@ namespace ClassLibrary.Data.Models
                     try
                     {
                         InternalAddUpdate(dbContext);
-                        base.AddUpdate(dbContext);
                         dbContextTransaction.Commit();
                     }
                     catch (Exception)
@@ -54,7 +53,6 @@ namespace ClassLibrary.Data.Models
             else
             {
                 InternalAddUpdate(dbContext);
-                base.AddUpdate(dbContext);
             }
         }
 
@@ -70,7 +68,8 @@ namespace ClassLibrary.Data.Models
             if (this.Ordinal > 5)
                 throw new ValidationException($"{this.Ordinal} is not a value between 1 - 5.");
 
-            foreach(Site site in this.Sites)
+            base.AddUpdate(dbContext);
+            foreach (Site site in this.Sites)
                 site.AddUpdate(dbContext);
         }
 

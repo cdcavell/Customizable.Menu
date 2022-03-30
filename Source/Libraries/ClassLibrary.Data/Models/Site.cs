@@ -41,7 +41,6 @@ namespace ClassLibrary.Data.Models
                     try
                     {
                         InternalAddUpdate(dbContext);
-                        base.AddUpdate(dbContext);
                         dbContextTransaction.Commit();
                     }
                     catch (Exception)
@@ -54,7 +53,6 @@ namespace ClassLibrary.Data.Models
             else
             {
                 InternalAddUpdate(dbContext);
-                base.AddUpdate(dbContext);
             }
         }
 
@@ -67,6 +65,7 @@ namespace ClassLibrary.Data.Models
                 this.Ordinal = Convert.ToInt16(maxOrdinal + 1);
             }
 
+            base.AddUpdate(dbContext);
             foreach (var url in this.Urls)
                 url.AddUpdate(dbContext);
         }
@@ -75,6 +74,7 @@ namespace ClassLibrary.Data.Models
         public override void Delete(ApplicationDbContext dbContext)
         {
             short ordinal = this.Ordinal;
+            Guid guid = this.Guid;
 
             var dbContextTransaction = dbContext.Database.CurrentTransaction;
             if (dbContextTransaction == null)
@@ -85,7 +85,7 @@ namespace ClassLibrary.Data.Models
                     try
                     {
                         base.Delete(dbContext);
-                        InternalReorg(dbContext, ordinal);
+                        InternalReorg(dbContext, guid, ordinal);
                         dbContextTransaction.Commit();
                     }
                     catch (Exception)
@@ -98,7 +98,7 @@ namespace ClassLibrary.Data.Models
             else
             {
                 base.Delete(dbContext);
-                InternalReorg(dbContext, ordinal);
+                InternalReorg(dbContext, guid, ordinal);
             }
         }
 
@@ -106,12 +106,12 @@ namespace ClassLibrary.Data.Models
 
         #region staic methods
 
-        private static void InternalReorg(ApplicationDbContext dbContext, short ordinal)
+        private static void InternalReorg(ApplicationDbContext dbContext, Guid guid, short ordinal)
         {
-            foreach (Menu menuItem in dbContext.Menu.Where(x => x.Ordinal > ordinal).ToList())
+            foreach (Site siteItem in dbContext.Site.Where(x => x.Guid == guid).Where(x => x.Ordinal > ordinal).ToList())
             {
-                menuItem.Ordinal = Convert.ToInt16(menuItem.Ordinal - 1);
-                menuItem.AddUpdate(dbContext);
+                siteItem.Ordinal = Convert.ToInt16(siteItem.Ordinal - 1);
+                siteItem.AddUpdate(dbContext);
             }
         }
 
