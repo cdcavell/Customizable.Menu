@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse order-1 order-lg-0" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="">Configure</a></li>
+        <li class="nav-item"><a class="nav-link" asp-controller="Configure" asp-action="Index">Configure</a></li>
         @foreach (ClassLibrary.Data.Models.Menu menuItem in ViewBag.MenuItems)
         {
             <li class="nav-item nav-item-collapse"><a class="nav-link" href="/Home/Index/@menuItem.Guid">@menuItem.Description.Trim()</a></li>
