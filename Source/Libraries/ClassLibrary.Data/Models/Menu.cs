@@ -60,15 +60,18 @@ namespace ClassLibrary.Data.Models
 
         private void InternalAddUpdate(ApplicationDbContext dbContext)
         {
-            if (this.IsNew)
+            if (this.Ordinal < 1)
             {
                 short maxOrdinal = 0;
                 if (dbContext.Menu.Any()) maxOrdinal = dbContext.Menu.Max(x => x.Ordinal);
                 this.Ordinal = Convert.ToInt16(maxOrdinal + 1);
             }
 
-            if (this.Ordinal < 1 || this.Ordinal > 5)
+            if (this.Ordinal > 5)
                 throw new ValidationException($"{this.Ordinal} is not a value between 1 - 5.");
+
+            foreach(Site site in this.Sites)
+                site.AddUpdate(dbContext);
         }
 
 
