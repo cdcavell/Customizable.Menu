@@ -66,6 +66,12 @@
     max-width: calc(var(--vw, 1vw) * 70);
 }
 
+@media (min-width: 767.98px) {
+    .page-content {
+        min-width: 85%;
+    }
+}
+
 .home-area .fixed-wrapper .menu-list .single-item {
     color: #e6e6e6;
     display: block;
