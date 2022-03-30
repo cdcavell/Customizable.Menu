@@ -7,3 +7,25 @@
     </div>
 </div>
 
+@section scripts
+{
+    <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
+
+        let Urls = {
+            GetMenuList: "/Configure/GetMenuList"
+        };
+
+        let Model = { 
+            Menu: Menu 
+        };
+
+        $(document).ready(function() {
+
+            model = ajaxPost(Urls.GetMenuList, VerificationToken, Model);
+
+        });
+    
+    </script>
+}
+
+

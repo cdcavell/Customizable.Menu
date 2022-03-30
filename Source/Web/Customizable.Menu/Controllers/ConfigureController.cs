@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.Data;
 using ClassLibrary.Mvc.Services.AppSettings;
+using Customizable.Menu.Models.Configure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Customizable.Menu.Controllers
