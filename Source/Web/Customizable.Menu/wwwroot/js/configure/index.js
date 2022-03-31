@@ -1,18 +1,14 @@
-﻿$(document).ready(function () {
+﻿   
+let Configure = {
 
-    let Configure = function () {
+    Urls_Index_GetMenuList: "/Configure/GetMenuList",
+    
 
-        Urls: {
-            Index: {
-                GetMenuList: "/Configure/GetMenuList"
-            }
-        }
+    Index: function () {
 
-        function Index()  {
-
-            alert(Urls.Index.GetMenuList);
-        }
+        $(document).ready(function () {
+            alert(Urls_Index_GetMenuList);
+        });
 
     }
-
-});
+};
