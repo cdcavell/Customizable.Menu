@@ -16,12 +16,18 @@
         };
 
         let Model = { 
-            Menu: Menu 
+            Menus: EmptyMenu
         };
 
         $(document).ready(function() {
 
-            model = ajaxPost(Urls.GetMenuList, VerificationToken, Model);
+            ajaxPost(Urls.GetMenuList, VerificationToken, Model)
+                .then(function (data) {
+                    console.debug(data);
+                })
+                .catch((error) => {
+                    ajaxError(error)
+                });
 
         });
     

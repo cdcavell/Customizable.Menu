@@ -51,6 +51,16 @@ namespace ClassLibrary.Mvc.Controllers
             return new BadRequestObjectResult(message);
         }
 
+        protected ObjectResult ExceptionResult(Exception ex)
+        {
+            string controller = RouteData.Values.GetValueOrDefault("Controller")?.ToString() ?? string.Empty;
+            string action = RouteData.Values.GetValueOrDefault("Action")?.ToString() ?? string.Empty;
+            string message = $"Exception thrown in Controller: {controller} Action: {action}";
+
+            _logger.LogError(ex, message);
+            return new ObjectResult(message) { StatusCode = 403 };
+        }
+
         protected KeyValuePair<int, string> ValidateModel<M>(M model)
         {
             if (model == null)

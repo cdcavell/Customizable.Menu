@@ -2,6 +2,6 @@
 {
     public class IndexViewModel
     {
-        public List<ClassLibrary.Data.Models.Menu> Menu { get; set; } = new();
+        public List<ClassLibrary.Data.Models.Menu> Menus { get; set; } = new();
     }
 }
