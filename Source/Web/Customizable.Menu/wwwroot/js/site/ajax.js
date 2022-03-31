@@ -12,6 +12,7 @@
 function ajaxPost(url, token, model) {
     return new Promise((resolve, reject) => {
         console.debug('-- AJax POST: ' + url + ' token: ' + token);
+        console.debug('-- Data In:');
         console.debug(model);
             
         $.ajax({
@@ -25,6 +26,7 @@ function ajaxPost(url, token, model) {
                 model: model
             },
             success: function (data) {
+                console.debug('-- Data Out:');
                 console.debug(data);
                 resolve(data);
             },
@@ -61,6 +63,7 @@ function ajaxGet(url) {
             cache: false,
             dataType: "json",
             success: function (data) {
+                console.debug('-- Data Out:');
                 console.debug(data);
                 resolve(data);
             },
@@ -81,7 +84,7 @@ function ajaxError(error) {
     console.error('Status Code : ' + error.status);
     console.error('Status Text : ' + error.statusText);
     console.error('Response    : ' + error.responseText);
-    console.error(response);
+    console.error(error);
 
     alert('Status: ' + error.statusText + '\r\nCode: ' + error.status + '\r\nResponse: ' + error.responseText);
 

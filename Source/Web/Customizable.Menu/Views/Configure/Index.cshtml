@@ -12,29 +12,11 @@
     <script type="text/javascript" src="~/js/configure.min.js" asp-append-version="true" nonce="@ViewBag.ScriptNonce"></script>
     <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
 
-        let Urls = {
-            GetMenuList: "/Configure/GetMenuList"
-        };
-
-        let Model = { 
-            Menus: EmptyMenu
-        };
-
         $(document).ready(function() {
 
             Configure.Index();
 
-            ajaxPost(Urls.GetMenuList, VerificationToken, Model)
-                .then(function (data) {
-                    console.debug(data);
-                })
-                .catch((error) => {
-                    ajaxError(error)
-                });
-
         });
-    
+
     </script>
 }
-
-
