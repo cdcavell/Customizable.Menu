@@ -37,16 +37,20 @@ namespace ClassLibrary.Mvc.Controllers
 
         protected BadRequestObjectResult InvalidModelState()
         {
-            string message = _invalidModelState;
-            List<ModelErrorCollection> errors = ModelState.Values
-                .Where(x => x.RawValue != null)
-                .Select(x => x.Errors)
-                .Where(x => x.Any())
+            string message = _invalidModelState + $"{AsciiCodes.CRLF}";
+            List<KeyValuePair<string, ModelStateEntry?>> errors = ModelState
+                .Where(x => x.Value?.ValidationState == ModelValidationState.Invalid)
                 .ToList();
 
-            foreach (ModelErrorCollection errorCollection in errors)
-                foreach (ModelError error in errorCollection)
-                    message += $"{AsciiCodes.CRLF}{error.ErrorMessage}";
+            foreach (KeyValuePair<string, ModelStateEntry?> keyValue in errors)
+            {
+                message += $"{AsciiCodes.CRLF}Key: {keyValue.Key}";
+                if (keyValue.Value != null)
+                    foreach (ModelError error in keyValue.Value.Errors)
+                        message += $"{AsciiCodes.CRLF} - {error.ErrorMessage}";
+
+                message += $"{AsciiCodes.CRLF}";
+            }
 
             return new BadRequestObjectResult(message);
         }
