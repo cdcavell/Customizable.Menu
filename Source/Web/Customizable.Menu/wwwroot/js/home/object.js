@@ -28,9 +28,11 @@
                         BuildSliderContainer(data.Menus[0].Sites);
                     }
 
+                    noWait();
                 })
                 .catch((error) => {
                     ajaxError(error)
+                    noWait();
                 });
 
         });

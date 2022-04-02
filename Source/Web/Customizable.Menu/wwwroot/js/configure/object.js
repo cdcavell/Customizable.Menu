@@ -17,10 +17,12 @@
                 .then(function (data) {
 
                     BuildSliderContainer(data.Menus);
+                    noWait();
 
                 })
                 .catch((error) => {
                     ajaxError(error)
+                    noWait();
                 });
 
         });
@@ -37,7 +39,9 @@
 
                 // Card header
                 markup += '<div class="main card-header px-2 py-1" type="button" role="tab" id="heading-' + key + '">';
-                markup += '<h5 class="text-left text-dark mb-0">' + value.Description.trim() + '</h5>';
+                markup += '<h5 class="text-left text-dark mb-0">' + value.Description.trim();
+                markup += '<div class="float-right m-0 p-0 border">Float right on all viewport sizes</div>';
+                markup += '</h5>';
                 markup += '</div>';
 
                 // Card body
