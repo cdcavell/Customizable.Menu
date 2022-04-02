@@ -22,6 +22,9 @@ namespace Customizable.Menu.Controllers
         [HttpGet]
         public IActionResult Index(Guid Id)
         {
+            if (!_dbContext.HasAnyLinks())
+                return RedirectToAction("Index", "Configure");
+
             this.LoadMenu(Id, false);
             ApplicationCookie cookie = new(_httpContextAccessor, _encryptionKey);
             cookie.SetValue("session", "menuGuid", ViewBag.MenuGuid.ToString());

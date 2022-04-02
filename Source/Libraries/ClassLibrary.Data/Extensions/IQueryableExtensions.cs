@@ -27,5 +27,20 @@ namespace System.Linq
             return dbContext.SortedMenuList()
                 .AsNoTrackingWithIdentityResolution();
         }
+
+        public static bool HasAnyLinks(this ApplicationDbContext dbContext)
+        {
+            long count = dbContext.SortedMenuListNoTracking()
+                .Select(menu => menu.Sites).FirstOrDefault()!
+                .Select(site => site.Urls).FirstOrDefault()!
+                .Select(url => url.Link)
+                .Where(link => !string.IsNullOrEmpty(link))
+                .LongCount();
+
+            if (count > 0)
+                return true;
+
+            return false;
+        }
     }
 }
