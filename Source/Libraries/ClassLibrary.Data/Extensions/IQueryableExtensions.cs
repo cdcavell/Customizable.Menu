@@ -62,25 +62,6 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
-        public static void DeleteMenuItem(this ApplicationDbContext dbContext, Guid guid)
-        {
-            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
-            using (dbContextTransaction)
-            {
-                try
-                {
-                    ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(guid);
-                    menu.Delete(dbContext);
-                    dbContextTransaction.Commit();
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
         public static Site SiteItem(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Site
@@ -97,25 +78,6 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
-        public static void DeleteSiteItem(this ApplicationDbContext dbContext, Guid guid)
-        {
-            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
-            using (dbContextTransaction)
-            {
-                try
-                {
-                    Site site = dbContext.SiteItem(guid);
-                    site.Delete(dbContext);
-                    dbContextTransaction.Commit();
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
         public static Url UrlItem(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Url
@@ -130,15 +92,32 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
-        public static void DeleteUrlItem(this ApplicationDbContext dbContext, Guid guid)
+
+        public static void DeleteItem(this ApplicationDbContext dbContext, EntityTypes entityType, Guid guid)
         {
             IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
             using (dbContextTransaction)
             {
                 try
                 {
-                    Url url = dbContext.UrlItem(guid);
-                    url.Delete(dbContext);
+                    switch(entityType)
+                    {
+                        case EntityTypes.Menu:
+                            ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(guid);
+                            menu.Delete(dbContext);
+                            break;
+                        case EntityTypes.Site:
+                            Site site = dbContext.SiteItem(guid);
+                            site.Delete(dbContext);
+                            break;
+                        case EntityTypes.Url:
+                            Url url = dbContext.UrlItem(guid);
+                            url.Delete(dbContext);
+                            break;
+                        default:
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                    }
+
                     dbContextTransaction.Commit();
                 }
                 catch (Exception)

@@ -29,9 +29,6 @@ namespace Customizable.Menu.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult GetMenuList(IndexViewModel model)
         [HttpGet]
         public IActionResult GetMenuList()
         {
@@ -61,20 +58,7 @@ namespace Customizable.Menu.Controllers
 
             try
             {
-                switch (model.EntityType)
-                {
-                    case EntityTypes.Menu:
-                        _dbContext.DeleteMenuItem(model.Guid);
-                        break;
-                    case EntityTypes.Site:
-                        _dbContext.DeleteSiteItem(model.Guid);
-                        break;
-                    case EntityTypes.Url:
-                        _dbContext.DeleteUrlItem(model.Guid);
-                        break;
-                    default:
-                        throw new ArgumentException($"Invalid Entity Type: {model.EntityType}");
-                }
+                _dbContext.DeleteItem(model.EntityType, model.Guid);
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(Ok(), options);
