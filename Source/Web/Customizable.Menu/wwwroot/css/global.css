@@ -57,19 +57,32 @@
 
 .page-content {
     border-radius: 15px;
-    background-color: rgba(40, 56, 35, 0.20);
     top: 5vh;
-    padding-top: 3%;
+    padding-top: 1.5%;
     height: 100vh;
     height: calc(var(--vh, 1vh) * 80);
     max-width: 100vw;
     max-width: calc(var(--vw, 1vw) * 70);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 @media (min-width: 767.98px) {
     .page-content {
         min-width: 85%;
     }
+}
+
+.page-content .shadow {
+    border-radius: 15px;
+    background-color: rgba(40, 56, 35, 0.20);
+    top: 5vh;
+    padding: 1.5%;
+    margin: 0;
+}
+ 
+.page-content .shadow .card{
+    background-color: rgba(255, 255, 255, 0.70);
 }
 
 .home-area .fixed-wrapper .menu-list .single-item {

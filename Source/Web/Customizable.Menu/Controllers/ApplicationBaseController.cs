@@ -43,27 +43,36 @@ namespace Customizable.Menu.Controllers
             catch (ArgumentNullException) { }
             catch (FormatException) { }
 
-            this.LoadMenu(menuId);
+            this.LoadMenu(menuId, false);
         }
 
-        protected void LoadMenu(Guid menuId)
+        protected void LoadMenu(Guid menuGuid, bool isConfigure)
         {
             List<ClassLibrary.Data.Models.Menu> menuItems = _dbContext
                 .SortedMenuListNoTracking().ToList();
 
-            if (menuId == Guid.Empty)
-                menuId = menuItems.OrderBy(menu => menu.Ordinal)
+            menuGuid = menuItems.OrderBy(menu => menu.Ordinal)
+                .Where(x => x.Guid == menuGuid)
+                .Select(x => x.Guid)
+                .FirstOrDefault();
+
+            if ((menuGuid == Guid.Empty) && (!isConfigure))
+                menuGuid = menuItems.OrderBy(menu => menu.Ordinal)
                     .Select(menu => menu.Guid).FirstOrDefault();
 
-            ViewBag.MenuId = menuId;
+            ViewBag.MenuGuid = menuGuid;
+            ViewBag.IsConfigure = isConfigure;
+            ViewBag.MenuItems = menuItems.Where(menu => menu.Guid != menuGuid).ToList();
             ViewBag.MenuTitle = menuItems
-                .Where(menu => menu.Guid == menuId)
+                .Where(menu => menu.Guid == menuGuid)
                 .OrderBy(menu => menu.Ordinal)
                 .Select(menu => menu.Description)
                 .FirstOrDefault();
-            ViewBag.MenuItems = menuItems.Where(menu => menu.Guid != menuId).ToList();
 
-            _logger.LogDebug("Selected Menu Id: {menuId}", menuId);
+            if (isConfigure)
+                ViewBag.MenuTitle = "Configure";
+
+            _logger.LogDebug("Selected Menu Id: {menuGuid}", menuGuid);
         }
     }
 }

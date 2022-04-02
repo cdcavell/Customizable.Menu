@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Data;
+using ClassLibrary.Mvc.Http;
 using ClassLibrary.Mvc.Services.AppSettings;
-using Customizable.Menu.Models.Configure;
+using Customizable.Menu.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -22,6 +23,10 @@ namespace Customizable.Menu.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            this.LoadMenu(Guid.Empty, true);
+            ApplicationCookie cookie = new(_httpContextAccessor, _encryptionKey);
+            cookie.SetValue("session", "menuGuid", ViewBag.MenuGuid.ToString());
+
             return View();
         }
 

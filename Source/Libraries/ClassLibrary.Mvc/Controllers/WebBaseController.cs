@@ -44,10 +44,10 @@ namespace ClassLibrary.Mvc.Controllers
 
             foreach (KeyValuePair<string, ModelStateEntry?> keyValue in errors)
             {
-                message += $"{AsciiCodes.CRLF}Key: {keyValue.Key}";
+                message += $"{AsciiCodes.CRLF}Key: {keyValue.Key}{AsciiCodes.CRLF}";
                 if (keyValue.Value != null)
                     foreach (ModelError error in keyValue.Value.Errors)
-                        message += $"{AsciiCodes.CRLF} - {error.ErrorMessage}";
+                        message += $"{error.ErrorMessage} ";
 
                 message += $"{AsciiCodes.CRLF}";
             }
@@ -55,14 +55,16 @@ namespace ClassLibrary.Mvc.Controllers
             return new BadRequestObjectResult(message);
         }
 
-        protected ObjectResult ExceptionResult(Exception ex)
+        protected ObjectResult ExceptionResult(Exception exception)
         {
             string controller = RouteData.Values.GetValueOrDefault("Controller")?.ToString() ?? string.Empty;
             string action = RouteData.Values.GetValueOrDefault("Action")?.ToString() ?? string.Empty;
-            string message = $"Exception thrown in Controller: {controller} Action: {action}";
+            string errorMessage = $"Exception thrown in Controller: {controller} Action: {action} {AsciiCodes.CRLF}Exception: {exception.Message}";
+            if (exception.InnerException != null)
+                errorMessage += $"{AsciiCodes.CRLF}Inner Exception: {exception.InnerException.Message}";
 
-            _logger.LogError(ex, message);
-            return new ObjectResult(message) { StatusCode = 403 };
+            _logger.LogError(exception, "{errorMessage}", errorMessage);
+            return new ObjectResult(errorMessage) { StatusCode = 403 };
         }
 
         protected KeyValuePair<int, string> ValidateModel<M>(M model)
@@ -95,11 +97,13 @@ namespace ClassLibrary.Mvc.Controllers
 
         protected string ExceptionMessage(Exception exception)
         {
-            _logger.LogError(exception, $"ExceptionMessage");
-
-            string errorMessage = $"Exception: {exception.Message}";
+            string controller = RouteData.Values.GetValueOrDefault("Controller")?.ToString() ?? string.Empty;
+            string action = RouteData.Values.GetValueOrDefault("Action")?.ToString() ?? string.Empty;
+            string errorMessage = $"Exception thrown in Controller: {controller} Action: {action} {AsciiCodes.CRLF}Exception: {exception.Message}";
             if (exception.InnerException != null)
                 errorMessage += $"{AsciiCodes.CRLF}Inner Exception: {exception.InnerException.Message}";
+
+            _logger.LogError(exception, "{errorMessage}", errorMessage);
 
             return errorMessage;
         }

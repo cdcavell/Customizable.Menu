@@ -11,7 +11,7 @@
 
 function ajaxPost(url, token, model) {
     return new Promise((resolve, reject) => {
-        console.debug('-- AJax POST: ' + url + ' token: ' + token);
+        console.debug('-- AJax POST: ' + url);
         console.debug('-- Data In:');
         console.debug(model);
             
@@ -54,7 +54,7 @@ function ajaxPost(url, token, model) {
  */
 function ajaxGet(url) {
     return new Promise((resolve, reject) => {
-        console.debug('-- AJax GET: ' + url + ' token: ' + token);
+        console.debug('-- AJax GET: ' + url);
         console.debug(model);
         $.ajax({
             url: url,
