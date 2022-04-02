@@ -7,19 +7,23 @@
             GetSiteList: "/Home/GetSiteList"
         }
 
-        const EnvironmentTypes = {};
-
         $(document).ready(async function () {
 
             let Model = {
-                MenuGuid: $('#MenuGuid').val()
+                Guid: $('#MenuGuid').val()
             }
 
             await ajaxPost(Urls.GetSiteList, VerificationToken, Model)
                 .then(function (data) {
 
+                    console.debug('-- Loading EnityTypes');
+                    $.each(data.EntityTypeList, function (key, value) {
+                        EntityTypes[key] = value.Value;
+                    });
+                    console.debug(EntityTypes);
+
                     console.debug('-- Loading EnvironmentTypes');
-                    $.each(data.EnvironmentTypes, function (key, value) {
+                    $.each(data.EnvironmentTypeList, function (key, value) {
                         EnvironmentTypes[key] = value.Value;
                     });
                     console.debug(EnvironmentTypes);

@@ -1,12 +1,15 @@
-﻿using ClassLibrary.Data.Models;
+﻿using ClassLibrary.Data;
+using ClassLibrary.Data.Models;
 
 namespace Customizable.Menu.Models
 {
     public class IndexViewModel
     {
-        public List<KeyValuePair<int, string>> EnvironmentTypes { get; } = Url.GetEnumList();
-        public Guid MenuGuid { get; set; } = Guid.Empty;
+        public List<KeyValuePair<int, string>> EnvironmentTypeList { get; } = Url.GetEnumList();
+        public List<KeyValuePair<int, string>> EntityTypeList { get; } = Entities.GetEnumList();
         public List<ClassLibrary.Data.Models.Menu> Menus { get; set; } = new();
+        public Guid Guid { get; set; } = Guid.Empty;
+        public EntityTypes EntityType { get; set; } = EntityTypes.None;
 
     }
 }

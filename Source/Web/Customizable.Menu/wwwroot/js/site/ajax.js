@@ -55,7 +55,6 @@ function ajaxPost(url, token, model) {
 function ajaxGet(url) {
     return new Promise((resolve, reject) => {
         console.debug('-- AJax GET: ' + url);
-        console.debug(model);
         $.ajax({
             url: url,
             method: "GET",

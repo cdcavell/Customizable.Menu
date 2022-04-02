@@ -20,12 +20,12 @@ namespace Customizable.Menu.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(Guid Id)
+        public IActionResult Index(Guid guid)
         {
             if (!_dbContext.HasAnyLinks())
                 return RedirectToAction("Index", "Configure");
 
-            this.LoadMenu(Id, false);
+            this.LoadMenu(guid, false);
             ApplicationCookie cookie = new(_httpContextAccessor, _encryptionKey);
             cookie.SetValue("session", "menuGuid", ViewBag.MenuGuid.ToString());
 
@@ -42,7 +42,7 @@ namespace Customizable.Menu.Controllers
             try
             {
                 model.Menus = _dbContext.SortedMenuListNoTracking()
-                    .Where(menu => menu.Guid == model.MenuGuid).ToList();
+                    .Where(menu => menu.Guid == model.Guid).ToList();
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(model, options);

@@ -1,11 +1,8 @@
 ﻿using ClassLibrary.Data;
-using ClassLibrary.Data.Models;
 using ClassLibrary.Mvc.Http;
 using ClassLibrary.Mvc.Services.AppSettings;
 using Customizable.Menu.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -32,15 +29,18 @@ namespace Customizable.Menu.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult GetMenuList(IndexViewModel model)
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult GetMenuList(IndexViewModel model)
+        [HttpGet]
+        public IActionResult GetMenuList()
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
 
             try
             {
+                IndexViewModel model = new();
                 model.Menus = _dbContext.SortedMenuListNoTracking().ToList();
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles  };
@@ -54,14 +54,27 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteMenuItem(IndexViewModel model)
+        public IActionResult DeleteItem(IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
 
             try
             {
-                _dbContext.DeleteMenuItem(model.MenuGuid);
+                switch (model.EntityType)
+                {
+                    case EntityTypes.Menu:
+                        _dbContext.DeleteMenuItem(model.Guid);
+                        break;
+                    case EntityTypes.Site:
+                        _dbContext.DeleteSiteItem(model.Guid);
+                        break;
+                    case EntityTypes.Url:
+                        _dbContext.DeleteUrlItem(model.Guid);
+                        break;
+                    default:
+                        throw new ArgumentException($"Invalid Entity Type: {model.EntityType}");
+                }
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(Ok(), options);

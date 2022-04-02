@@ -44,33 +44,101 @@ namespace System.Linq
             return false;
         }
 
-        public static Menu MenuItem(this ApplicationDbContext dbContext, Guid menuGuid)
+        public static Menu MenuItem(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Menu
                 .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
                 .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
-                .Where(menu => menu.Guid == menuGuid)
+                .Where(menu => menu.Guid == guid)
                 .FirstOrDefault() ?? new();
         }
 
-        public static Menu MenuItemNoTracking(this ApplicationDbContext dbContext, Guid menuGuid)
+        public static Menu MenuItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Menu.AsNoTrackingWithIdentityResolution()
                 .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
                 .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
-                .Where(menu => menu.Guid == menuGuid)
+                .Where(menu => menu.Guid == guid)
                 .FirstOrDefault() ?? new();
         }
 
-        public static void DeleteMenuItem(this ApplicationDbContext dbContext, Guid menuGuid)
+        public static void DeleteMenuItem(this ApplicationDbContext dbContext, Guid guid)
         {
             IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
             using (dbContextTransaction)
             {
                 try
                 {
-                    ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(menuGuid);
+                    ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(guid);
                     menu.Delete(dbContext);
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public static Site SiteItem(this ApplicationDbContext dbContext, Guid guid)
+        {
+            return dbContext.Site
+                .Include(site => site.Urls.OrderBy(url => url.Environment))
+                .Where(site => site.Guid == guid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static Site SiteItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
+        {
+            return dbContext.Site.AsNoTrackingWithIdentityResolution()
+                .Include(site => site.Urls.OrderBy(url => url.Environment))
+                .Where(site => site.Guid == guid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static void DeleteSiteItem(this ApplicationDbContext dbContext, Guid guid)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    Site site = dbContext.SiteItem(guid);
+                    site.Delete(dbContext);
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public static Url UrlItem(this ApplicationDbContext dbContext, Guid guid)
+        {
+            return dbContext.Url
+                .Where(url => url.Guid == guid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static Url UrlItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
+        {
+            return dbContext.Url.AsNoTrackingWithIdentityResolution()
+                .Where(url => url.Guid == guid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static void DeleteUrlItem(this ApplicationDbContext dbContext, Guid guid)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    Url url = dbContext.UrlItem(guid);
+                    url.Delete(dbContext);
                     dbContextTransaction.Commit();
                 }
                 catch (Exception)
