@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Data;
 using ClassLibrary.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace System.Linq
 {
@@ -41,6 +42,43 @@ namespace System.Linq
                 return true;
 
             return false;
+        }
+
+        public static Menu MenuItem(this ApplicationDbContext dbContext, Guid menuGuid)
+        {
+            return dbContext.Menu
+                .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
+                .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
+                .Where(menu => menu.Guid == menuGuid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static Menu MenuItemNoTracking(this ApplicationDbContext dbContext, Guid menuGuid)
+        {
+            return dbContext.Menu.AsNoTrackingWithIdentityResolution()
+                .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
+                .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
+                .Where(menu => menu.Guid == menuGuid)
+                .FirstOrDefault() ?? new();
+        }
+
+        public static void DeleteMenuItem(this ApplicationDbContext dbContext, Guid menuGuid)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(menuGuid);
+                    menu.Delete(dbContext);
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

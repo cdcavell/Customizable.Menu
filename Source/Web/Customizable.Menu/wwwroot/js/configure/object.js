@@ -4,7 +4,8 @@
     Index: function () {
 
         const Urls = {
-            GetMenuList: "/Configure/GetMenuList"
+            GetMenuList: "/Configure/GetMenuList",
+            DeleteMenuItem: "/Configure/DeleteMenuItem"
         }
 
         $(document).ready(async function () {
@@ -89,6 +90,7 @@
                 $(markup).appendTo('#sliderContainer');
             });
 
+            // Show Sites
             $(".menu-div").click(function () {
                 let result = $(this).attr("id").indexOf('-');
                 result = $(this).attr("id").substring(result);
@@ -96,12 +98,31 @@
                 return false;
             });
 
+            // Delete Menu Item
             $(".menu-delete").click(function () {
-                let result = $(this).data("guid");
-                alert(result);
+                let confirmMessage = "Are your sure you want to continue? All defined links under menu item will be deleted as well.";
+
+                if (confirm(confirmMessage)) {
+                    wait();
+
+                    let Model = {
+                        MenuGuid: $(this).data("guid")
+                    }
+
+                    ajaxPost(Urls.DeleteMenuItem, VerificationToken, Model)
+                        .then(function (data) {
+                        })
+                        .catch((error) => {
+                            ajaxError(error)
+                        });
+
+                    location.reload();
+                }
+
                 return false;
             });
 
+            // Edit Menu Item
             $(".menu-edit").click(function () {
                 let result = $(this).data("guid");
                 alert(result);

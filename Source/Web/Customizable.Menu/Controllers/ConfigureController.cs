@@ -1,8 +1,10 @@
 ﻿using ClassLibrary.Data;
+using ClassLibrary.Data.Models;
 using ClassLibrary.Mvc.Http;
 using ClassLibrary.Mvc.Services.AppSettings;
 using Customizable.Menu.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -48,7 +50,26 @@ namespace Customizable.Menu.Controllers
             {
                 return ExceptionResult(exception);
             }
-            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteMenuItem(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+                _dbContext.DeleteMenuItem(model.MenuGuid);
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(Ok(), options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
         }
     }
 }
