@@ -36,7 +36,7 @@
                 let markup = '<div class="card">';
 
                 // Card header
-                markup += '<div class="main card-header" type="button" role="tab" id="heading-' + key + '">';
+                markup += '<div class="main card-header px-2 py-1" type="button" role="tab" id="heading-' + key + '">';
                 markup += '<h5 class="text-left text-dark mb-0">' + value.Description.trim() + '</h5>';
                 markup += '</div>';
 
@@ -47,7 +47,7 @@
                 $.each(value.Sites, function (subKey, subValue) {
 
                     markup += '<div class="card">';
-                    markup += '<div class="sub card-header" type="button" role="tab" id="heading-' + key + '-' + subKey + '">';
+                    markup += '<div class="sub card-header px-2 py-1" type="button" role="tab" id="heading-' + key + '-' + subKey + '">';
                     markup += '<h7 class="text-left text-dark mb-0">' + subValue.Description.trim() + '</h7>';
                     markup += '</div>';
 
@@ -58,7 +58,7 @@
                     $.each(subValue.Urls, function (urlKey, urlValue) {
 
                         markup += '<div class="card">';
-                        markup += '<div class="url card-header" role="tab" id="heading-' + key + '-' + subKey + '-' + urlKey + '">';
+                        markup += '<div class="url card-header px-2 py-1" role="tab" id="heading-' + key + '-' + subKey + '-' + urlKey + '">';
                         markup += '<h7 class="text-left text-dark mb-0">' + urlValue.Link.trim() + '</h7>';
                         markup += '</div>';
                         markup += '</div>';
