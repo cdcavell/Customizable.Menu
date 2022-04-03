@@ -11,5 +11,6 @@ namespace Customizable.Menu.Models
         public Guid Guid { get; set; } = Guid.Empty;
         public EntityTypes EntityType { get; set; } = EntityTypes.None;
         public string Description { get; set; } = string.Empty;
+        public EnvironmentTypes? EnvironmentType { get; set; }
     }
 }

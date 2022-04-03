@@ -145,7 +145,7 @@
             $('.item-update').click(function () {
                 let Model = {
                     Guid: $(this).data('guid'),
-                    EntityType: EntityTypes.ByValue('Menu'),
+                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
                     Description: $($(this).data('textbox')).val()
                 };
                 

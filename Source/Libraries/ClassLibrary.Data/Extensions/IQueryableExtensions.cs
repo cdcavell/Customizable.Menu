@@ -9,10 +9,10 @@ namespace System.Linq
     {
         public static byte[] EncryptionKey(this ApplicationDbContext dbContext)
         {
-             return dbContext.Configuration
-                .OrderBy(config => config.Guid).Take(1)
-                .Select(config => config.EncryptionKey)
-                .Single().ToArray();
+            return dbContext.Configuration
+               .OrderBy(config => config.Guid).Take(1)
+               .Select(config => config.EncryptionKey)
+               .Single().ToArray();
         }
 
         public static IQueryable<Menu> SortedMenuList(this ApplicationDbContext dbContext)
@@ -100,7 +100,7 @@ namespace System.Linq
             {
                 try
                 {
-                    switch(entityType)
+                    switch (entityType)
                     {
                         case EntityTypes.Menu:
                             ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(guid);
@@ -114,6 +114,50 @@ namespace System.Linq
                             Url url = dbContext.UrlItem(guid);
                             url.Delete(dbContext);
                             break;
+                        default:
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                    }
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public static void UpdateItem(this ApplicationDbContext dbContext, EntityTypes entityType, Guid guid, string description, EnvironmentTypes? environment)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    switch (entityType)
+                    {
+                        case EntityTypes.Menu:
+                            ClassLibrary.Data.Models.Menu menu = dbContext.MenuItem(guid);
+                            menu.Description = description.Clean();
+                            menu.AddUpdate(dbContext);
+                            break;
+                        case EntityTypes.Site:
+                            Site site = dbContext.SiteItem(guid);
+                            site.Description = description.Clean();
+                            site.AddUpdate(dbContext);
+                            break;
+                        case EntityTypes.Url:
+                            if (environment.HasValue)
+                                if (!Enum.IsDefined(typeof(EnvironmentTypes), environment))
+                                {
+                                    Url url = dbContext.UrlItem(guid);
+                                    url.Link = description.Clean();
+                                    url.Environment = (EnvironmentTypes)environment;
+                                    url.AddUpdate(dbContext);
+                                    break;
+                                }
+                            throw new ArgumentException($"Invalid Environment Type: {environment}");
                         default:
                             throw new ArgumentException($"Invalid Entity Type: {entityType}");
                     }

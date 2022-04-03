@@ -78,6 +78,7 @@ namespace Customizable.Menu.Controllers
 
             try
             {
+                _dbContext.UpdateItem(model.EntityType, model.Guid, model.Description.Clean(), model.EnvironmentType);
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(Ok(), options);
