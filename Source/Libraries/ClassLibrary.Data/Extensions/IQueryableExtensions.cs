@@ -171,5 +171,183 @@ namespace System.Linq
                 }
             }
         }
+
+        public static void MoveUp(this ApplicationDbContext dbContext, EntityTypes entityType, Guid guid)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    switch (entityType)
+                    {
+                        case EntityTypes.Menu:
+                            MoveMenuUp(dbContext, guid);
+                            break;
+                        case EntityTypes.Site:
+                            MoveSiteUp(dbContext, guid);
+                            break;
+                        case EntityTypes.Url:
+                            MoveUrlUp(dbContext, guid);
+                            break;
+                        default:
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                    }
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        private static void MoveMenuUp(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Menu? menuA = dbContext.Menu.Where(menu => menu.Guid == guid).FirstOrDefault();
+            if (menuA != null)
+            {
+                Menu? menuB = dbContext.Menu.Where(menu => menu.Ordinal == (menuA.Ordinal - 1)).FirstOrDefault();
+                if (menuB != null)
+                {
+                    menuA.Ordinal = menuB.Ordinal;
+                    menuB.Ordinal = Convert.ToInt16(menuB.Ordinal + 1);
+
+                    List<Menu> menus = new();
+                    menus.Add(menuA);
+                    menus.Add(menuB);
+                    dbContext.UpdateRange(menus);
+                }
+            }
+        }
+
+        private static void MoveSiteUp(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Site? siteA = dbContext.Site.Where(site => site.Guid == guid).FirstOrDefault();
+            if (siteA != null)
+            {
+                Site? siteB = dbContext.Site.Where(site => site.Ordinal == (siteA.Ordinal - 1)).FirstOrDefault();
+                if (siteB != null)
+                {
+                    siteA.Ordinal = siteB.Ordinal;
+                    siteB.Ordinal = Convert.ToInt16(siteB.Ordinal + 1);
+
+                    List<Site> sites = new();
+                    sites.Add(siteA);
+                    sites.Add(siteB);
+                    dbContext.UpdateRange(sites);
+                }
+            }
+        }
+
+        private static void MoveUrlUp(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Url? urlA = dbContext.Url.Where(url => url.Guid == guid).FirstOrDefault();
+            if (urlA != null)
+            {
+                Url? urlB = dbContext.Url.Where(url => url.Environment == (urlA.Environment - 1)).FirstOrDefault();
+                if (urlB != null)
+                {
+                    urlA.Environment = urlB.Environment;
+                    urlB.Environment = (urlB.Environment + 1);
+
+                    List<Url> urls = new();
+                    urls.Add(urlA);
+                    urls.Add(urlB);
+                    dbContext.UpdateRange(urls);
+                }
+            }
+        }
+
+        public static void MoveDown(this ApplicationDbContext dbContext, EntityTypes entityType, Guid guid)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    switch (entityType)
+                    {
+                        case EntityTypes.Menu:
+                            MoveMenuDown(dbContext, guid);
+                            break;
+                        case EntityTypes.Site:
+                            MoveSiteDown(dbContext, guid);
+                            break;
+                        case EntityTypes.Url:
+                            MoveUrlDown(dbContext, guid);
+                            break;
+                        default:
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                    }
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        private static void MoveMenuDown(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Menu? menuA = dbContext.Menu.Where(menu => menu.Guid == guid).FirstOrDefault();
+            if (menuA != null)
+            {
+                Menu? menuB = dbContext.Menu.Where(menu => menu.Ordinal == (menuA.Ordinal + 1)).FirstOrDefault();
+                if (menuB != null)
+                {
+                    menuA.Ordinal = menuB.Ordinal;
+                    menuB.Ordinal = Convert.ToInt16(menuB.Ordinal - 1);
+
+                    List<Menu> menus = new();
+                    menus.Add(menuA);
+                    menus.Add(menuB);
+                    dbContext.UpdateRange(menus);
+                }
+            }
+        }
+
+        private static void MoveSiteDown(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Site? siteA = dbContext.Site.Where(site => site.Guid == guid).FirstOrDefault();
+            if (siteA != null)
+            {
+                Site? siteB = dbContext.Site.Where(site => site.Ordinal == (siteA.Ordinal + 1)).FirstOrDefault();
+                if (siteB != null)
+                {
+                    siteA.Ordinal = siteB.Ordinal;
+                    siteB.Ordinal = Convert.ToInt16(siteB.Ordinal - 1);
+
+                    List<Site> sites = new();
+                    sites.Add(siteA);
+                    sites.Add(siteB);
+                    dbContext.UpdateRange(sites);
+                }
+            }
+        }
+
+        private static void MoveUrlDown(this ApplicationDbContext dbContext, Guid guid)
+        {
+            Url? urlA = dbContext.Url.Where(url => url.Guid == guid).FirstOrDefault();
+            if (urlA != null)
+            {
+                Url? urlB = dbContext.Url.Where(url => url.Environment == (urlA.Environment + 1)).FirstOrDefault();
+                if (urlB != null)
+                {
+                    urlA.Environment = urlB.Environment;
+                    urlB.Environment = (urlB.Environment - 1);
+
+                    List<Url> urls = new();
+                    urls.Add(urlA);
+                    urls.Add(urlB);
+                    dbContext.UpdateRange(urls);
+                }
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using ClassLibrary.Mvc.Html;
 using ClassLibrary.Mvc.Models.Home;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -155,6 +156,9 @@ namespace ClassLibrary.Mvc.Controllers
                     _logger.LogError(exceptionFeature.Error, $"Exception RequestId = {requestId}");
                 }
             }
+
+            if (Request.IsAjaxRequest())
+                return StatusCode(vm.StatusCode, vm.StatusMessage);
 
             return View("Error", vm);
 

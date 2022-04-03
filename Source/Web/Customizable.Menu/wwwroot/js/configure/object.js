@@ -5,13 +5,19 @@
 
         const Urls = {
             GetMenuList: "/Configure/GetMenuList",
-            DeleteItem: "/Configure/DeleteItem",
-            UpdateItem: "/Configure/UpdateItem",
+            ItemDelete: "/Configure/ItemDelete",
+            ItemUpdate: "/Configure/ItemUpdate",
+            ItemUp: "/Config/ItemUp",
+            ItemDown: "/Config/ItemDown"
         };
 
-        $(document).ready(async function () {
+        $(document).ready(function () {
+            GetMenuList();
+        });
 
-            await ajaxGet(Urls.GetMenuList)
+        function GetMenuList() {
+
+            ajaxGet(Urls.GetMenuList)
                 .then(function (data) {
 
                     console.debug('-- Loading EnityTypes');
@@ -35,11 +41,12 @@
                     noWait();
                 });
 
-        });
+        }
 
         function BuildSliderContainer(sliderItems) {
 
             console.debug('-- BuildSliderContainer');
+            $('#sliderContainer').empty();
 
             $.each(sliderItems, function (menuKey, menuValue) {
                 console.debug('-- Card: ' + menuKey + ' Data:');
@@ -128,13 +135,13 @@
                         EntityType: EntityTypes.ByValue($(this).data('entitytype'))
                     };
 
-                    ajaxPost(Urls.DeleteItem, VerificationToken, Model)
+                    ajaxPost(Urls.ItemDelete, VerificationToken, Model)
                         .then(function (data) {
-                            window.location.reload();
+                            GetMenuList();
                         })
                         .catch((error) => {
                             ajaxError(error);
-                            window.location.reload();
+                            GetMenuList();
                         });
                 }
 
@@ -143,19 +150,21 @@
 
             // Update Item
             $('.item-update').click(function () {
+                wait();
+
                 let Model = {
                     Guid: $(this).data('guid'),
                     EntityType: EntityTypes.ByValue($(this).data('entitytype')),
                     Description: $($(this).data('textbox')).val()
                 };
                 
-                ajaxPost(Urls.UpdateItem, VerificationToken, Model)
+                ajaxPost(Urls.ItemUpdate, VerificationToken, Model)
                     .then(function (data) {
-                        window.location.reload();
+                        GetMenuList();
                     })
                     .catch((error) => {
                         ajaxError(error);
-                        window.location.reload();
+                        GetMenuList();
                     });
 
                 return false;
@@ -163,15 +172,43 @@
 
             // Move Item Up
             $('.item-up').click(function () {
-                let result = $(this).data('guid');
-                alert(result);
+                wait();
+
+                let Model = {
+                    Guid: $(this).data('guid'),
+                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
+                };
+
+                ajaxPost(Urls.ItemUp, VerificationToken, Model)
+                    .then(function (data) {
+                        GetMenuList();
+                    })
+                    .catch((error) => {
+                        ajaxError(error);
+                        GetMenuList();
+                    });
+
                 return false;
             });
 
             // Move Item Down
             $('.item-down').click(function () {
-                let result = $(this).data('guid');
-                alert(result);
+                wait();
+
+                let Model = {
+                    Guid: $(this).data('guid'),
+                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
+                };
+
+                ajaxPost(Urls.ItemDown, VerificationToken, Model)
+                    .then(function (data) {
+                        GetMenuList();
+                    })
+                    .catch((error) => {
+                        ajaxError(error);
+                        GetMenuList();
+                    });
+
                 return false;
             });
 

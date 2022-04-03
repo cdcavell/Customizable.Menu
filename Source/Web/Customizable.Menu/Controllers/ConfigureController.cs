@@ -51,7 +51,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteItem(IndexViewModel model)
+        public IActionResult ItemDelete(IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -71,7 +71,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateItem(IndexViewModel model)
+        public IActionResult ItemUpdate(IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -79,6 +79,46 @@ namespace Customizable.Menu.Controllers
             try
             {
                 _dbContext.UpdateItem(model.EntityType, model.Guid, model.Description.Clean(), model.EnvironmentType);
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(Ok(), options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ItemUp(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+                _dbContext.MoveUp(model.EntityType, model.Guid);
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(Ok(), options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ItemDown(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+                _dbContext.MoveDown(model.EntityType, model.Guid);
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(Ok(), options);
