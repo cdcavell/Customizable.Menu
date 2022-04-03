@@ -85,7 +85,7 @@
                 markup += '<div class="card-body text-left">';
 
                 markup += '<div class="clearfix m-0 p-0">';
-                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Site"><i class="fas fa-plus"></i></button>';
                 markup += '</div>';
 
                 $.each(menuValue.Sites, function (siteKey, siteValue) {
@@ -108,7 +108,7 @@
                     markup += '<div class="card-body text-left">';
 
                     markup += '<div class="clearfix m-0 p-0">';
-                    markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                    markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Url"><i class="fas fa-plus"></i></button>';
                     markup += '</div>';
 
                     $.each(siteValue.Urls, function (urlKey, urlValue) {
@@ -150,6 +150,11 @@
 
                 $(id).slideToggle(1000);
                 return false;
+            });
+
+            // Add Item
+            $('.item-add').click(function () {
+                alert($(this).data('entitytype'));
             });
 
             // Delete Item
