@@ -7,13 +7,16 @@
             GetSiteList: "/Home/GetSiteList"
         }
 
-        $(document).ready(async function () {
+        $(document).ready(function () {
+            GetSiteList();
+        });
 
+        function GetSiteList() {
             let Model = {
                 Guid: $('#MenuGuid').val()
             }
 
-            await ajaxPost(Urls.GetSiteList, VerificationToken, Model)
+            ajaxPost(Urls.GetSiteList, VerificationToken, Model)
                 .then(function (data) {
 
                     console.debug('-- Loading EnityTypes');
@@ -38,8 +41,7 @@
                     ajaxError(error)
                     noWait();
                 });
-
-        });
+        }
 
         function BuildSliderContainer(sliderItems) {
 

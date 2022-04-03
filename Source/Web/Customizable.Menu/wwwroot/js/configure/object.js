@@ -33,18 +33,16 @@
                     console.debug(EnvironmentTypes);
 
                     BuildSliderContainer(data.Menus);
-                    noWait();
 
                 })
                 .catch((error) => {
                     ajaxError(error)
-                    noWait();
                 });
 
+            noWait();
         }
 
         function BuildSliderContainer(sliderItems) {
-
             console.debug('-- BuildSliderContainer');
             $('#sliderContainer').empty();
 
@@ -125,11 +123,10 @@
 
             // Delete Item
             $('.item-delete').click(function () {
+                wait('fast');
                 let confirmMessage = 'Are your sure you want to continue? All defined links under this item will be deleted as well.';
 
                 if (confirm(confirmMessage)) {
-                    wait();
-
                     let Model = {
                         Guid: $(this).data('guid'),
                         EntityType: EntityTypes.ByValue($(this).data('entitytype'))
@@ -150,8 +147,7 @@
 
             // Update Item
             $('.item-update').click(function () {
-                wait();
-
+                wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
                     EntityType: EntityTypes.ByValue($(this).data('entitytype')),
@@ -172,8 +168,7 @@
 
             // Move Item Up
             $('.item-up').click(function () {
-                wait();
-
+                wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
                     EntityType: EntityTypes.ByValue($(this).data('entitytype')),
@@ -193,8 +188,7 @@
 
             // Move Item Down
             $('.item-down').click(function () {
-                wait();
-
+                wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
                     EntityType: EntityTypes.ByValue($(this).data('entitytype')),

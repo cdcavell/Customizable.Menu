@@ -62,7 +62,10 @@ namespace Customizable.Menu.Controllers
 
             ViewBag.MenuGuid = menuGuid;
             ViewBag.IsConfigure = isConfigure;
-            ViewBag.MenuItems = menuItems.Where(menu => menu.Guid != menuGuid).ToList();
+            ViewBag.MenuItems = menuItems
+                .Where(menu => menu.Guid != menuGuid)
+                .Where(menu => menu.Sites.Any(site => site.Urls.Any()))
+                .ToList();
             ViewBag.MenuTitle = menuItems
                 .Where(menu => menu.Guid == menuGuid)
                 .OrderBy(menu => menu.Ordinal)

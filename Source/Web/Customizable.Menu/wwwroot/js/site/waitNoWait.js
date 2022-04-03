@@ -1,5 +1,11 @@
-﻿function wait() {
-    $('.preloader').delay(500).fadeIn('slow');
+﻿function wait(speed) {
+
+    if (speed === 'fast') {
+        $('.preloader').fadeIn(speed);
+    } else {
+        $('.preloader').delay(500).fadeIn('slow');
+    }
+
     $('.preloader-icon').fadeIn(400);
 }
 
