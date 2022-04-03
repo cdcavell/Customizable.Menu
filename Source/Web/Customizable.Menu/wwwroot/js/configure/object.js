@@ -56,11 +56,16 @@
             console.debug('-- BuildSliderContainer');
             $('#sliderContainer').empty();
 
+            let markup = '<div class="clearfix m-0 p-0">';
+            markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+            markup += '</div>';
+            $(markup).appendTo('#sliderContainer');
+
             $.each(sliderItems, function (menuKey, menuValue) {
                 console.debug('-- Card: ' + menuKey + ' Data:');
                 console.debug(menuValue);
 
-                let markup = '<div class="card">';
+                markup = '<div class="card">';
 
                 // Card header
                 markup += '<div class="item-slide card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '" data-slide="#collapse-' + menuKey + '">';
@@ -79,12 +84,16 @@
                 markup += '<div id="collapse-' + menuKey + '" class="collapse" role="tabpanel" aria-labelledby="heading-' + menuKey + '">';
                 markup += '<div class="card-body text-left">';
 
+                markup += '<div class="clearfix m-0 p-0">';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                markup += '</div>';
+
                 $.each(menuValue.Sites, function (siteKey, siteValue) {
 
                     markup += '<div class="card">';
                     markup += '<div class="item-slide card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '-' + siteKey + '" data-slide="#collapse-' + menuKey + '-' + siteKey + '">';
                     markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '" name="textbox-' + menuKey + '-' + siteKey + '" value="' + siteValue.Description.trim() + '">';
-                    markup += '<div class="float-right m-0 p-0">';
+                    markup += '<div class="float-right m-0 mt-2 p-0">';
 
                     markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
                     markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
@@ -97,6 +106,10 @@
                     // Card body
                     markup += '<div id="collapse-' + menuKey + '-' + siteKey + '" class="collapse" role="tabpanel" aria-labelledby="heading-' + menuKey + '-' + siteKey + '">';
                     markup += '<div class="card-body text-left">';
+
+                    markup += '<div class="clearfix m-0 p-0">';
+                    markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                    markup += '</div>';
 
                     $.each(siteValue.Urls, function (urlKey, urlValue) {
 
@@ -117,8 +130,8 @@
                 markup += '</div>';
 
                 markup += '</div>';
-
                 $(markup).appendTo('#sliderContainer');
+
             });
 
             $('.input-sm').click(function () {
