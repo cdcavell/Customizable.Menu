@@ -1,7 +1,7 @@
 ﻿using ClassLibrary.Data;
 using ClassLibrary.Data.Models;
 
-namespace Customizable.Menu.Models
+namespace Customizable.Menu.Models.Configure
 {
     public class IndexViewModel
     {

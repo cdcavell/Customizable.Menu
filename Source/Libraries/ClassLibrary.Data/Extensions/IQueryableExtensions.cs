@@ -253,7 +253,7 @@ namespace System.Linq
                 if (urlB != null)
                 {
                     urlA.Environment = urlB.Environment;
-                    urlB.Environment = (urlB.Environment + 1);
+                    urlB.Environment++;
 
                     List<Url> urls = new();
                     urls.Add(urlA);
@@ -345,7 +345,7 @@ namespace System.Linq
                 if (urlB != null)
                 {
                     urlA.Environment = urlB.Environment;
-                    urlB.Environment = (urlB.Environment - 1);
+                    urlB.Environment--;
 
                     List<Url> urls = new();
                     urls.Add(urlA);

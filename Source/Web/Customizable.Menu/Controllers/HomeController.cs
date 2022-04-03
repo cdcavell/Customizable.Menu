@@ -1,7 +1,7 @@
 ﻿using ClassLibrary.Data;
 using ClassLibrary.Mvc.Http;
 using ClassLibrary.Mvc.Services.AppSettings;
-using Customizable.Menu.Models;
+using Customizable.Menu.Models.Home;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
