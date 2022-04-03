@@ -10,6 +10,6 @@ namespace Customizable.Menu.Models
         public List<ClassLibrary.Data.Models.Menu> Menus { get; set; } = new();
         public Guid Guid { get; set; } = Guid.Empty;
         public EntityTypes EntityType { get; set; } = EntityTypes.None;
-
+        public string Description { get; set; } = string.Empty;
     }
 }

@@ -26,19 +26,3 @@ const EnvironmentTypes = {
         }
     }
 };
-
-const Menus = [{
-    Guid: Guid.Empty,
-    Ordinal: 1,
-    Description: "X",
-    Sites: [{
-        Guid: Guid.Empty,
-        Ordinal: 1,
-        Description: "X",
-        Urls: [{
-            Guid: Guid.Empty,
-            Environment: 1,
-            Link: "X",
-        }]
-    }]
-}];

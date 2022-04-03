@@ -17,6 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary.Data", "Source
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentaton", "Documentaton", "{55E1CF91-1584-44DC-98D2-6E03691D80F6}"
 	ProjectSection(SolutionItems) = preProject
+		ASSETS-LICENSES.md = ASSETS-LICENSES.md
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
