@@ -1,10 +1,8 @@
  - [Kitzu - Personal Portfolio Template](https://themeforest.net/item/kitzu-personal-portfolio-template/26075107)
 
-
 The above asset is under [Envato Market](https://themeforest.net/) [Regular License](https://themeforest.net/licenses/terms/regular):
 
 Read about licensing details here: http://themeforest.net/licenses
-
 
 ---
 
