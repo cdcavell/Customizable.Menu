@@ -51,6 +51,25 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult ItemAdd(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(Ok(), options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ItemDelete(IndexViewModel model)
         {
             if (!ModelState.IsValid)

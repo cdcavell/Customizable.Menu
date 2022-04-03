@@ -154,7 +154,11 @@
 
             // Add Item
             $('.item-add').click(function () {
-                alert($(this).data('entitytype'));
+                $('#addModal').modal('show');
+            });
+
+            $('.add-close').click(function () {
+                $('#addModal').modal('hide');
             });
 
             // Delete Item
