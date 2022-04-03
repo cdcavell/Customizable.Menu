@@ -1,9 +1,26 @@
 [
   {
+    "outputFileName": "wwwroot/lib/Kitzu/css/main.min.css",
+    "inputFiles": [
+      "wwwroot/lib/Kitzu/css/main.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
       "wwwroot/css/!(*.min).css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/Kitzu/js/main.min.js",
+    "inputFiles": [
+      "wwwroot/lib/Kitzu/js/main.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   },
   {
     "outputFileName": "wwwroot/js/site.min.js",

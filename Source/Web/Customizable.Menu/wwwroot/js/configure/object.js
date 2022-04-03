@@ -11,9 +11,18 @@
             ItemDown: "/Configure/ItemDown"
         };
 
+        const OpenCard = {};
+
         $(document).ready(function () {
+            wait();
             GetMenuList();
         });
+
+        function ShowCards() {
+            $.each(OpenCard, function (key, value) {
+                $(value).slideToggle();
+            });
+        };
 
         function GetMenuList() {
 
@@ -33,6 +42,7 @@
                     console.debug(EnvironmentTypes);
 
                     BuildSliderContainer(data.Menus);
+                    ShowCards();
 
                 })
                 .catch((error) => {
@@ -57,10 +67,10 @@
                 markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '" name="textbox-' + menuKey + '" value="' + menuValue.Description.trim() + '">';
                 markup += '<div class="float-right m-0 mt-2 p-0">';
 
-                markup += '<i class="item-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
-                markup += '<i class="item-update text-dark fas fa-pen mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu" data-textbox="#textbox-' + menuKey + '"></i>';
-                markup += '<i class="item-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
-                markup += '<i class="item-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu" data-textbox="#textbox-' + menuKey + '"></i>';
+                markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
 
                 markup += '</div > ';
                 markup += '</div>';
@@ -76,10 +86,10 @@
                     markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '" name="textbox-' + menuKey + '-' + siteKey + '" value="' + siteValue.Description.trim() + '">';
                     markup += '<div class="float-right m-0 p-0">';
 
-                    markup += '<i class="item-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
-                    markup += '<i class="item-update text-dark fas fa-pen mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
-                    markup += '<i class="item-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
-                    markup += '<i class="item-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
+                    markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
 
                     markup += '</div > ';
                     markup += '</div>';
@@ -117,7 +127,15 @@
 
             // Slide Item
             $('.item-slide').click(function () {
-                $($(this).data('slide')).slideToggle(1000);
+                let id = $(this).data('slide').trim();
+
+                if (OpenCard[id] == null) {
+                    $(OpenCard).prop(id.substring(1, id.length), id);
+                } else {
+                    $(OpenCard).removeProp(id.substring(1, id.length));
+                }
+
+                $(id).slideToggle(1000);
                 return false;
             });
 

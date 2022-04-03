@@ -259,7 +259,7 @@
 
     // If Video variant
     if ($('.home-area').hasClass('video-variant')) {
-      $('#homeVideo').YTPlayer();
+    //  $('#homeVideo').YTPlayer();
     }
 
     /*----------  About: Testimonials  ----------*/
