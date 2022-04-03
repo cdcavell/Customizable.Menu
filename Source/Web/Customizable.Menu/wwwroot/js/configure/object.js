@@ -7,8 +7,8 @@
             GetMenuList: "/Configure/GetMenuList",
             ItemDelete: "/Configure/ItemDelete",
             ItemUpdate: "/Configure/ItemUpdate",
-            ItemUp: "/Config/ItemUp",
-            ItemDown: "/Config/ItemDown"
+            ItemUp: "/Configure/ItemUp",
+            ItemDown: "/Configure/ItemDown"
         };
 
         $(document).ready(function () {
@@ -199,7 +199,7 @@
                     Guid: $(this).data('guid'),
                     EntityType: EntityTypes.ByValue($(this).data('entitytype')),
                 };
-
+                
                 ajaxPost(Urls.ItemDown, VerificationToken, Model)
                     .then(function (data) {
                         GetMenuList();
