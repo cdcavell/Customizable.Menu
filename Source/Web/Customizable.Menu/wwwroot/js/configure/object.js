@@ -6,7 +6,8 @@
         const Urls = {
             GetMenuList: "/Configure/GetMenuList",
             DeleteItem: "/Configure/DeleteItem",
-        }
+            UpdateItem: "/Configure/UpdateItem",
+        };
 
         $(document).ready(async function () {
 
@@ -47,14 +48,14 @@
                 let markup = '<div class="card">';
 
                 // Card header
-                markup += '<div class="menu-div card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '">';
+                markup += '<div class="item-slide card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '" data-slide="#collapse-' + menuKey + '">';
                 markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '" name="textbox-' + menuKey + '" value="' + menuValue.Description.trim() + '">';
                 markup += '<div class="float-right m-0 mt-2 p-0">';
 
-                markup += '<i class="menu-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + menuValue.Guid + '"></i>';
-                markup += '<i class="menu-update text-dark fas fa-pen mx-1" type="button" data-guid="' + menuValue.Guid + '" data-textbox="textbox-' + menuKey + '"></i>';
-                markup += '<i class="menu-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + menuValue.Guid + '"></i>';
-                markup += '<i class="menu-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + menuValue.Guid + '"></i>';
+                markup += '<i class="item-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-update text-dark fas fa-pen mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu" data-textbox="#textbox-' + menuKey + '"></i>';
+                markup += '<i class="item-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
 
                 markup += '</div > ';
                 markup += '</div>';
@@ -66,14 +67,14 @@
                 $.each(menuValue.Sites, function (siteKey, siteValue) {
 
                     markup += '<div class="card">';
-                    markup += '<div class="site-div card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '-' + siteKey + '">';
+                    markup += '<div class="item-slide card-header px-2 py-1" type="button" role="tab" id="heading-' + menuKey + '-' + siteKey + '" data-slide="#collapse-' + menuKey + '-' + siteKey + '">';
                     markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '" name="textbox-' + menuKey + '-' + siteKey + '" value="' + siteValue.Description.trim() + '">';
                     markup += '<div class="float-right m-0 p-0">';
 
-                    markup += '<i class="site-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + siteValue.Guid + '"></i>';
-                    markup += '<i class="site-update text-dark fas fa-pen mx-1" type="button" data-guid="' + siteValue.Guid + '" data-textbox="textbox-' + menuKey + '-' + siteKey + '"></i>';
-                    markup += '<i class="site-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + siteValue.Guid + '"></i>';
-                    markup += '<i class="site-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + siteValue.Guid + '"></i>';
+                    markup += '<i class="item-delete text-dark fas fa-trash mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-update text-dark fas fa-pen mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
+                    markup += '<i class="item-up text-dark fas fa-arrow-up mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-down text-dark fas fa-arrow-down mx-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
 
                     markup += '</div > ';
                     markup += '</div>';
@@ -109,25 +110,23 @@
                 return false;
             });
 
-            // Show Sites
-            $('.menu-div').click(function () {
-                let result = $(this).attr('id').indexOf('-');
-                result = $(this).attr('id').substring(result);
-                $('#collapse' + result).slideToggle(1000);
+            // Slide Item
+            $('.item-slide').click(function () {
+                $($(this).data('slide')).slideToggle(1000);
                 return false;
             });
 
-            // Delete Menu Item
-            $('.menu-delete').click(function () {
-                let confirmMessage = 'Are your sure you want to continue? All defined links under menu item will be deleted as well.';
+            // Delete Item
+            $('.item-delete').click(function () {
+                let confirmMessage = 'Are your sure you want to continue? All defined links under this item will be deleted as well.';
 
                 if (confirm(confirmMessage)) {
                     wait();
 
                     let Model = {
                         Guid: $(this).data('guid'),
-                        EntityType: EntityTypes.ByValue('Menu')
-                    }
+                        EntityType: EntityTypes.ByValue($(this).data('entitytype'))
+                    };
 
                     ajaxPost(Urls.DeleteItem, VerificationToken, Model)
                         .then(function (data) {
@@ -142,78 +141,35 @@
                 return false;
             });
 
-            // Edit Menu Item
-            $('.menu-update').click(function () {
-                let guid = $(this).data('guid');
-                let textbox = $(this).data('textbox');
-                alert(textbox);
+            // Update Item
+            $('.item-update').click(function () {
+                let Model = {
+                    Guid: $(this).data('guid'),
+                    EntityType: EntityTypes.ByValue('Menu'),
+                    Description: $($(this).data('textbox')).val()
+                };
+                
+                ajaxPost(Urls.UpdateItem, VerificationToken, Model)
+                    .then(function (data) {
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        ajaxError(error);
+                        window.location.reload();
+                    });
+
                 return false;
             });
 
-            // Move Menu Up
-            $('.menu-up').click(function () {
+            // Move Item Up
+            $('.item-up').click(function () {
                 let result = $(this).data('guid');
                 alert(result);
                 return false;
             });
 
-            // Move Menu Down
-            $('.menu-down').click(function () {
-                let result = $(this).data('guid');
-                alert(result);
-                return false;
-            });
-
-            // Show Urls
-            $('.site-div').click(function () {
-                let result = $(this).attr('id').indexOf('-');
-                result = $(this).attr('id').substring(result);
-                $('#collapse' + result).slideToggle(1000);
-                return false;
-            });
-
-            // Delete Site Item
-            $('.site-delete').click(function () {
-                let confirmMessage = 'Are your sure you want to continue? All defined links under site item will be deleted as well.';
-
-                if (confirm(confirmMessage)) {
-                    wait();
-
-                    let Model = {
-                        Guid: $(this).data('guid'),
-                        EntityType: EntityTypes.ByValue('Site')
-                    }
-
-                    ajaxPost(Urls.DeleteItem, VerificationToken, Model)
-                        .then(function (data) {
-                            window.location.reload();
-                        })
-                        .catch((error) => {
-                            ajaxError(error);
-                            window.location.reload();
-                        });
-                }
-
-                return false;
-            });
-
-            // Edit Site Item
-            $('.site-update').click(function () {
-                let guid = $(this).data('guid');
-                let textbox = $(this).data('textbox');
-                alert(textbox);
-                return false;
-            });
-
-            // Move Site Up
-            $('.site-up').click(function () {
-                let result = $(this).data('guid');
-                alert(result);
-                return false;
-            });
-
-            // Move Site Down
-            $('.site-down').click(function () {
+            // Move Item Down
+            $('.item-down').click(function () {
                 let result = $(this).data('guid');
                 alert(result);
                 return false;

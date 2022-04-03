@@ -68,5 +68,24 @@ namespace Customizable.Menu.Controllers
                 return ExceptionResult(exception);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateItem(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(Ok(), options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
+        }
     }
 }
