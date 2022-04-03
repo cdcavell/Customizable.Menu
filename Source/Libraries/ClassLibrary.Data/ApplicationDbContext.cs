@@ -29,10 +29,6 @@ namespace ClassLibrary.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Menu>(entity => {
-                entity.HasIndex(e => e.Ordinal).IsUnique();
-            });
-
             base.OnModelCreating(builder);
         }
 

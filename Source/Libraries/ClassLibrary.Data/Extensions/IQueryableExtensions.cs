@@ -219,6 +219,7 @@ namespace System.Linq
                     menus.Add(menuA);
                     menus.Add(menuB);
                     dbContext.UpdateRange(menus);
+                    dbContext.SaveChanges();
                 }
             }
         }
@@ -238,6 +239,7 @@ namespace System.Linq
                     sites.Add(siteA);
                     sites.Add(siteB);
                     dbContext.UpdateRange(sites);
+                    dbContext.SaveChanges();
                 }
             }
         }
@@ -257,6 +259,7 @@ namespace System.Linq
                     urls.Add(urlA);
                     urls.Add(urlB);
                     dbContext.UpdateRange(urls);
+                    dbContext.SaveChanges();
                 }
             }
         }
@@ -308,6 +311,7 @@ namespace System.Linq
                     menus.Add(menuA);
                     menus.Add(menuB);
                     dbContext.UpdateRange(menus);
+                    dbContext.SaveChanges();
                 }
             }
         }
@@ -327,6 +331,7 @@ namespace System.Linq
                     sites.Add(siteA);
                     sites.Add(siteB);
                     dbContext.UpdateRange(sites);
+                    dbContext.SaveChanges();
                 }
             }
         }
@@ -346,6 +351,7 @@ namespace System.Linq
                     urls.Add(urlA);
                     urls.Add(urlB);
                     dbContext.UpdateRange(urls);
+                    dbContext.SaveChanges();
                 }
             }
         }
