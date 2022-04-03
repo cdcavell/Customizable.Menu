@@ -11,20 +11,25 @@
 
 <!-- Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Modal title</h5>
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-secondary" id="addModalLabel">Modal title</h5>
         <button type="button" class="close add-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span id="addDescriptionLabel" class="input-group-text">Description</span>
+          </div>
+          <input id="addDescriptionText" type="text" class="form-control" aria-label="Description">
+        </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-0">
         <button type="button" class="btn btn-secondary add-close" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Item</button>
+        <button type="button" class="btn btn-primary add-save">Add Item</button>
       </div>
     </div>
   </div>

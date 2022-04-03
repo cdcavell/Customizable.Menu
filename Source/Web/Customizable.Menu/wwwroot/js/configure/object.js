@@ -154,11 +154,20 @@
 
             // Add Item
             $('.item-add').click(function () {
+                $('#addModalLabel').text('New ' + $(this).data('entitytype') + ' Item');
                 $('#addModal').modal('show');
             });
 
             $('.add-close').click(function () {
                 $('#addModal').modal('hide');
+            });
+
+            $('#addModal').on('shown.bs.modal', function () {
+                $('#addDescriptionText').trigger('focus');
+            });
+
+            $('.add-save').click(function () {
+                alert('Saving ...');
             });
 
             // Delete Item
