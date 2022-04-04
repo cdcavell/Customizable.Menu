@@ -39,6 +39,7 @@ namespace Customizable.Menu.Controllers
             {
                 IndexViewModel model = new();
                 model.Menus = _dbContext.SortedMenuListNoTracking().ToList();
+                model.MaxMenuOrdinal = _dbContext.MaxMenuOrdinal();
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles  };
                 return Json(model, options) ;

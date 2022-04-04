@@ -13,6 +13,8 @@
 
         const OpenCard = {};
 
+        let MaxMenuOrdinal = 0;
+
         $(document).ready(function () {
             wait();
             GetMenuList();
@@ -28,17 +30,22 @@
 
             ajaxGet(Urls.GetMenuList)
                 .then(function (data) {
+                    console.debug('-- Loading MaxMenuOrdinal');
+                    MaxMenuOrdinal = data.MaxMenuOrdinal;
+                    console.debug('   MaxMenuOrdinal: ' + MaxMenuOrdinal);
 
                     console.debug('-- Loading EnityTypes');
                     $.each(data.EntityTypeList, function (key, value) {
                         EntityTypes[key] = value.Value;
                     });
+                    console.debug('   Property Count: ' + EntityTypes.PropertyCount());
                     console.debug(EntityTypes);
 
                     console.debug('-- Loading EnvironmentTypes');
                     $.each(data.EnvironmentTypeList, function (key, value) {
                         EnvironmentTypes[key] = value.Value;
                     });
+                    console.debug('   Property Count: ' + EnvironmentTypes.PropertyCount());
                     console.debug(EnvironmentTypes);
 
                     BuildSliderContainer(data.Menus);
@@ -56,10 +63,14 @@
             console.debug('-- BuildSliderContainer');
             $('#sliderContainer').empty();
 
-            let markup = '<div class="clearfix m-0 p-0">';
-            markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
-            markup += '</div>';
-            $(markup).appendTo('#sliderContainer');
+            let markup = '';
+
+            if (sliderItems.length < MaxMenuOrdinal) {
+                markup = '<div class="clearfix m-0 p-0">';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                markup += '</div>';
+                $(markup).appendTo('#sliderContainer');
+            }
 
             $.each(sliderItems, function (menuKey, menuValue) {
                 console.debug('-- Card: ' + menuKey + ' Data:');
@@ -107,9 +118,11 @@
                     markup += '<div id="collapse-' + menuKey + '-' + siteKey + '" class="collapse" role="tabpanel" aria-labelledby="heading-' + menuKey + '-' + siteKey + '">';
                     markup += '<div class="card-body text-left">';
 
-                    markup += '<div class="clearfix m-0 p-0">';
-                    markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Url"><i class="fas fa-plus"></i></button>';
-                    markup += '</div>';
+                    if (siteValue.Urls.length < EnvironmentTypes.PropertyCount()) {
+                        markup += '<div class="clearfix m-0 p-0">';
+                        markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Url"><i class="fas fa-plus"></i></button>';
+                        markup += '</div>';
+                    }
 
                     $.each(siteValue.Urls, function (urlKey, urlValue) {
 
@@ -189,6 +202,8 @@
                             ajaxError(error);
                             GetMenuList();
                         });
+                } else {
+                    noWait();
                 }
 
                 return false;

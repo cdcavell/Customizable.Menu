@@ -13,6 +13,19 @@ const EntityTypes = {
                     return prop;
             }
         }
+    },
+
+    PropertyCount: function () {
+        let count = 0;
+        for (var property in this) {
+            if (property != 'ByValue') {
+                if (property != 'PropertyCount') {
+                    count = count + 1;
+                }
+            }
+        }
+
+        return count;
     }
 };
 
@@ -24,5 +37,18 @@ const EnvironmentTypes = {
                     return prop;
             }
         }
+    },
+
+    PropertyCount: function () {
+        let count = 0;
+        for (var property in this) {
+            if (property != 'ByValue') {
+                if (property != 'PropertyCount') {
+                    count = count + 1;
+                }
+            } 
+        }
+
+        return count;
     }
 };

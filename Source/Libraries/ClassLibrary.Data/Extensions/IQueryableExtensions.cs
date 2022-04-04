@@ -355,5 +355,11 @@ namespace System.Linq
                 }
             }
         }
+
+        public static short MaxMenuOrdinal(this ApplicationDbContext dbContext)
+        {
+            return dbContext.Configuration
+                .Max(config => config.MaxMenuOrdinal);
+        }
     }
 }

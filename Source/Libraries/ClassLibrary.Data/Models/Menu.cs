@@ -11,7 +11,6 @@ namespace ClassLibrary.Data.Models
         #region properties
 
         [Required]
-        [Range(1, 5, ErrorMessage = "Valid integer range is 1 - 5")]
         public short Ordinal { get; set; }
 
         [Required]
@@ -66,8 +65,10 @@ namespace ClassLibrary.Data.Models
                 this.Ordinal = Convert.ToInt16(maxOrdinal + 1);
             }
 
-            if (this.Ordinal > 5)
-                throw new ValidationException($"{this.Ordinal} is not a value between 1 - 5.");
+            Configuration config = dbContext.Configuration.FirstOrDefault()!;
+
+            if (this.Ordinal > config.MaxMenuOrdinal)
+                throw new ValidationException($"{this.Ordinal} is not a value between 1 - {config.MaxMenuOrdinal}.");
 
             base.AddUpdate(dbContext);
             foreach (Site site in this.Sites)

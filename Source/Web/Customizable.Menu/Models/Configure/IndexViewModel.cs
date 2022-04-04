@@ -12,5 +12,6 @@ namespace Customizable.Menu.Models.Configure
         public EntityTypes EntityType { get; set; } = EntityTypes.None;
         public string Description { get; set; } = string.Empty;
         public EnvironmentTypes? EnvironmentType { get; set; }
+        public short MaxMenuOrdinal { get; set; }
     }
 }
