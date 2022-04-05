@@ -92,6 +92,54 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
+        public static void AddItem(this ApplicationDbContext dbContext, EntityTypes entityType, string description, Guid guid, EnvironmentTypes? environment)
+        {
+            IDbContextTransaction dbContextTransaction = dbContext.Database.BeginTransaction();
+            using (dbContextTransaction)
+            {
+                try
+                {
+                    switch (entityType)
+                    {
+                        case EntityTypes.Menu:
+                            ClassLibrary.Data.Models.Menu menu = new();
+                            menu.Description = description.Clean();
+                            menu.AddUpdate(dbContext);
+                            break;
+                        case EntityTypes.Site:
+                            ClassLibrary.Data.Models.Menu siteMenu = dbContext.MenuItem(guid);
+                            if ((siteMenu != null) && (siteMenu.Guid != Guid.Empty))
+                            {
+                                Site site = new();
+                                site.Menu = siteMenu;
+                                site.Description = description.Clean();
+                                site.AddUpdate(dbContext);
+                            }
+                            break;
+                        case EntityTypes.Url:
+                            Site urlSite = dbContext.SiteItem(guid);
+                            if ((urlSite != null) && (urlSite.Guid != Guid.Empty))
+                            {
+                                Url url = new();
+                                url.Site = urlSite;
+                                url.Link = description.Clean();
+                                url.Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+                                url.AddUpdate(dbContext);
+                            }
+                            break;
+                        default:
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                    }
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
+        }
 
         public static void DeleteItem(this ApplicationDbContext dbContext, EntityTypes entityType, Guid guid)
         {

@@ -82,7 +82,7 @@
 
             if (sliderItems.length < MaxMenuOrdinal) {
                 markup = '<div class="clearfix m-0 p-0">';
-                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="' + EntityTypes.ByValue('Menu') + '" data-guid="' + Guid.Empty + '"><i class="fas fa - plus"></i></button>';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm border border-secondary mb-1 mr-1 px-1 py-0 float-right" data-entitytype="' + EntityTypes.ByValue('Menu') + '" data-guid="' + Guid.Empty + '"><i class="fas fa-plus"></i></button>';
                 markup += '</div>';
                 $(markup).appendTo('#sliderContainer');
             }
@@ -192,12 +192,33 @@
                 $('#hiddenEntityType').val($(this).data('entitytype'));
                 $('#addModalLabel').text('New ' + EntityTypes[$(this).data('entitytype')] + ' Item');
                 $('#addDescriptionText').val('');
+
+                if (EntityTypes[$(this).data('entitytype')] === 'Url') {
+                    $('#addDescriptionLabel').text('Url Link');
+                    $('#addEnvironmentSelect').empty();
+                    $.each(EnvironmentTypes, function (key, value) {
+                        if (value.toString().toLowerCase().indexOf('function') === -1) {
+                            let markup = '<option value="' + key + '">' + value + '</option>';
+                            $(markup).appendTo('#addEnvironmentSelect');
+                        }
+                    });
+                    $('#addEnvironmentDiv').show();
+                } else {
+                    $('#addDescriptionLabel').text('Description');
+                    $('#addEnvironmentSelect').empty();
+                    $('#addEnvironmentDiv').hide();
+                }
+
                 $('#addModal').modal('show');
 
                 return false;
             });
 
-            $('#add-close').click(function () {
+            $('#addEnvironmentSelectArrow').click(function () {
+                $('#addEnvironmentSelect').trigger('click').focus();
+            });
+
+            $('.add-close').click(function () {
                 $('#addModal').modal('hide');
                 $('#hiddenGuid').val(null);
                 $('#hiddenEntityType').val(null);
@@ -226,7 +247,8 @@
                 let Model = {
                     Guid: $('#hiddenGuid').val(),
                     EntityType: $('#hiddenEntityType').val(),
-                    Description: $('#addDescriptionText').val()
+                    Description: $('#addDescriptionText').val(),
+                    EnvironmentType: $('#addEnvironmentSelect').find(":selected").val()
                 };
 
                 $('#hiddenGuid').val(null);
