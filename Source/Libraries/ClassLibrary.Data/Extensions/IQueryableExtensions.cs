@@ -242,6 +242,7 @@ namespace System.Linq
             if ((siteA != null) && (siteA.Guid != Guid.Empty))
             {
                 Site? siteB = dbContext.Site
+                    .Where(site => site.MenuGuid == siteA.MenuGuid)
                     .Where(site => site.Ordinal < siteA.Ordinal)
                     .OrderByDescending(site => site.Ordinal)
                     .FirstOrDefault();
@@ -271,6 +272,7 @@ namespace System.Linq
             if ((urlA != null) && (urlA.Guid != Guid.Empty))
             {
                 Url? urlB = dbContext.Url
+                    .Where(url => url.SiteGuid == urlA.SiteGuid)
                     .Where(url => url.Environment < urlA.Environment)
                     .OrderByDescending(url => url.Environment) 
                     .FirstOrDefault();
@@ -361,6 +363,7 @@ namespace System.Linq
             if (siteA != null)
             {
                 Site? siteB = dbContext.Site
+                    .Where(site => site.MenuGuid == siteA.MenuGuid)
                     .Where(site => site.Ordinal > siteA.Ordinal)
                     .OrderBy(site => site.Ordinal)
                     .FirstOrDefault();
@@ -390,6 +393,7 @@ namespace System.Linq
             if ((urlA != null) && (urlA.Guid != Guid.Empty))
             {
                 Url? urlB = dbContext.Url
+                    .Where(url => url.SiteGuid == urlA.SiteGuid)
                     .Where(url => url.Environment > urlA.Environment)
                     .OrderBy(url => url.Environment)
                     .FirstOrDefault();
