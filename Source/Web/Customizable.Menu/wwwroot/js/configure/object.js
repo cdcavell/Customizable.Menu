@@ -5,20 +5,35 @@
 
         const Urls = {
             GetMenuList: "/Configure/GetMenuList",
+            ItemAdd: "/Configure/ItemAdd",
             ItemDelete: "/Configure/ItemDelete",
             ItemUpdate: "/Configure/ItemUpdate",
             ItemUp: "/Configure/ItemUp",
             ItemDown: "/Configure/ItemDown"
         };
 
-        const OpenCard = {};
+        let OpenCard = {};
 
         let MaxMenuOrdinal = 0;
 
         $(document).ready(function () {
             wait();
+
+            let obj = JSON.parse(sessionStorage.getItem('ConfigureOpenCard'));
+            if (obj != null) {
+                console.debug('-- Loading OpenCard:');
+                $.each(obj, function (key, value) {
+                    $(OpenCard).prop(key, value);
+                    console.debug('key: ' + key + ' value: ' + value);
+                });
+            }
+
             GetMenuList();
         });
+
+        function ReloadDocument() {
+            window.document.location.reload();
+        };
 
         function ShowCards() {
             $.each(OpenCard, function (key, value) {
@@ -67,7 +82,7 @@
 
             if (sliderItems.length < MaxMenuOrdinal) {
                 markup = '<div class="clearfix m-0 p-0">';
-                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Menu"><i class="fas fa-plus"></i></button>';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="' + EntityTypes.ByValue('Menu') + '" data-guid="' + Guid.Empty + '"><i class="fas fa - plus"></i></button>';
                 markup += '</div>';
                 $(markup).appendTo('#sliderContainer');
             }
@@ -83,10 +98,10 @@
                 markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '" name="textbox-' + menuKey + '" value="' + menuValue.Description.trim() + '">';
                 markup += '<div class="float-right m-0 mt-2 p-0">';
 
-                markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
-                markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu" data-textbox="#textbox-' + menuKey + '"></i>';
-                markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
-                markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="Menu"></i>';
+                markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Menu') + '"></i>';
+                markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Menu') + '" data-textbox="#textbox-' + menuKey + '"></i>';
+                markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Menu') + '"></i>';
+                markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + menuValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Menu') + '"></i>';
 
                 markup += '</div > ';
                 markup += '</div>';
@@ -96,7 +111,7 @@
                 markup += '<div class="card-body text-left">';
 
                 markup += '<div class="clearfix m-0 p-0">';
-                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Site"><i class="fas fa-plus"></i></button>';
+                markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="' + EntityTypes.ByValue('Site') + '" data-guid="' + menuValue.Guid + '"><i class="fas fa-plus"></i></button>';
                 markup += '</div>';
 
                 $.each(menuValue.Sites, function (siteKey, siteValue) {
@@ -106,10 +121,10 @@
                     markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '" name="textbox-' + menuKey + '-' + siteKey + '" value="' + siteValue.Description.trim() + '">';
                     markup += '<div class="float-right m-0 mt-2 p-0">';
 
-                    markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
-                    markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
-                    markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
-                    markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="Site"></i>';
+                    markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Site') + '"></i>';
+                    markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Site') + '" data-textbox="#textbox-' + menuKey + '-' + siteKey + '"></i>';
+                    markup += '<i class="item-up text-dark fas fa-arrow-up mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Site') + '"></i>';
+                    markup += '<i class="item-down text-dark fas fa-arrow-down mx-1 p-1" type="button" data-guid="' + siteValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Site') + '"></i>';
 
                     markup += '</div > ';
                     markup += '</div>';
@@ -120,7 +135,7 @@
 
                     if (siteValue.Urls.length < EnvironmentTypes.PropertyCount()) {
                         markup += '<div class="clearfix m-0 p-0">';
-                        markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="Url"><i class="fas fa-plus"></i></button>';
+                        markup += '<button type="button" class="item-add btn btn-secondary btn-sm mb-1 mr-1 px-1 py-0 float-right" data-entitytype="' + EntityTypes.ByValue('Url') + '" data-guid="' + siteValue.Guid + '"><i class="fas fa-plus"></i></button>';
                         markup += '</div>';
                     }
 
@@ -153,34 +168,81 @@
 
             // Slide Item
             $('.item-slide').click(function () {
-                let id = $(this).data('slide').trim();
+                let value = $(this).data('slide').trim();
+                let key = value.substring(1, value.length);
 
-                if (OpenCard[id] == null) {
-                    $(OpenCard).prop(id.substring(1, id.length), id);
+                if (OpenCard[key] == null) {
+                    $(OpenCard).prop(key, value);
+                    console.debug('-- OpenCard Added Key: ' + key + ' Value: ' + value);
                 } else {
-                    $(OpenCard).removeProp(id.substring(1, id.length));
+                    $(OpenCard).removeProp(key);
+                    console.debug('-- OpenCard Removed Key: ' + key);
                 }
 
-                $(id).slideToggle(1000);
+                sessionStorage.removeItem('ConfigureOpenCard');
+                sessionStorage.setItem('ConfigureOpenCard', JSON.stringify(OpenCard));
+                $(value).slideToggle(1000);
+
                 return false;
             });
 
             // Add Item
             $('.item-add').click(function () {
-                $('#addModalLabel').text('New ' + $(this).data('entitytype') + ' Item');
+                $('#hiddenGuid').val($(this).data('guid'));
+                $('#hiddenEntityType').val($(this).data('entitytype'));
+                $('#addModalLabel').text('New ' + EntityTypes[$(this).data('entitytype')] + ' Item');
+                $('#addDescriptionText').val('');
                 $('#addModal').modal('show');
+
+                return false;
             });
 
-            $('.add-close').click(function () {
+            $('#add-close').click(function () {
                 $('#addModal').modal('hide');
+                $('#hiddenGuid').val(null);
+                $('#hiddenEntityType').val(null);
+                $('#addDescriptionText').val(null);
+
+                return false;
+            });
+
+            $('#add-close-x').click(function () {
+                $('#addModal').modal('hide');
+                $('#hiddenGuid').val(null);
+                $('#hiddenEntityType').val(null);
+                $('#addDescriptionText').val(null);
+
+                return false;
             });
 
             $('#addModal').on('shown.bs.modal', function () {
                 $('#addDescriptionText').trigger('focus');
             });
 
-            $('.add-save').click(function () {
-                alert('Saving ...');
+            $('#add-save').click(function () {
+                $('#addModal').modal('hide');
+                wait('fast');
+
+                let Model = {
+                    Guid: $('#hiddenGuid').val(),
+                    EntityType: $('#hiddenEntityType').val(),
+                    Description: $('#addDescriptionText').val()
+                };
+
+                $('#hiddenGuid').val(null);
+                $('#hiddenEntityType').val(null);
+                $('#addDescriptionText').val(null);
+
+                ajaxPost(Urls.ItemAdd, VerificationToken, Model)
+                    .then(function (data) {
+                        ReloadDocument();
+                    })
+                    .catch((error) => {
+                        ajaxError(error);
+                        ReloadDocument();
+                    });
+
+                return false;
             });
 
             // Delete Item
@@ -191,16 +253,16 @@
                 if (confirm(confirmMessage)) {
                     let Model = {
                         Guid: $(this).data('guid'),
-                        EntityType: EntityTypes.ByValue($(this).data('entitytype'))
+                        EntityType: $(this).data('entitytype')
                     };
 
                     ajaxPost(Urls.ItemDelete, VerificationToken, Model)
                         .then(function (data) {
-                            GetMenuList();
+                            ReloadDocument();
                         })
                         .catch((error) => {
                             ajaxError(error);
-                            GetMenuList();
+                            ReloadDocument();
                         });
                 } else {
                     noWait();
@@ -214,17 +276,17 @@
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
-                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
+                    EntityType: $(this).data('entitytype'),
                     Description: $($(this).data('textbox')).val()
                 };
-                
+
                 ajaxPost(Urls.ItemUpdate, VerificationToken, Model)
                     .then(function (data) {
-                        GetMenuList();
+                        ReloadDocument();
                     })
                     .catch((error) => {
                         ajaxError(error);
-                        GetMenuList();
+                        ReloadDocument();
                     });
 
                 return false;
@@ -235,16 +297,16 @@
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
-                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
+                    EntityType: $(this).data('entitytype')
                 };
 
                 ajaxPost(Urls.ItemUp, VerificationToken, Model)
                     .then(function (data) {
-                        GetMenuList();
+                        ReloadDocument();
                     })
                     .catch((error) => {
                         ajaxError(error);
-                        GetMenuList();
+                        ReloadDocument();
                     });
 
                 return false;
@@ -255,16 +317,16 @@
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
-                    EntityType: EntityTypes.ByValue($(this).data('entitytype')),
+                    EntityType: $(this).data('entitytype')
                 };
-                
+
                 ajaxPost(Urls.ItemDown, VerificationToken, Model)
                     .then(function (data) {
-                        GetMenuList();
+                        ReloadDocument();
                     })
                     .catch((error) => {
                         ajaxError(error);
-                        GetMenuList();
+                        ReloadDocument();
                     });
 
                 return false;

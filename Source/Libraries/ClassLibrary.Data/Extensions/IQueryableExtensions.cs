@@ -206,19 +206,28 @@ namespace System.Linq
 
         private static void MoveMenuUp(this ApplicationDbContext dbContext, Guid guid)
         {
-            Menu? menuA = dbContext.Menu.Where(menu => menu.Guid == guid).FirstOrDefault();
-            if (menuA != null)
-            {
-                Menu? menuB = dbContext.Menu.Where(menu => menu.Ordinal == (menuA.Ordinal - 1)).FirstOrDefault();
-                if (menuB != null)
-                {
-                    menuA.Ordinal = menuB.Ordinal;
-                    menuB.Ordinal = Convert.ToInt16(menuB.Ordinal + 1);
+            Menu? menuA = dbContext.Menu
+                .Where(menu => menu.Guid == guid)
+                .FirstOrDefault();
 
-                    List<Menu> menus = new();
-                    menus.Add(menuA);
-                    menus.Add(menuB);
-                    dbContext.UpdateRange(menus);
+            if ((menuA != null) && (menuA.Guid != Guid.Empty))
+            {
+                Menu? menuB = dbContext.Menu
+                    .Where(menu => menu.Ordinal < menuA.Ordinal)
+                    .OrderByDescending(menu => menu.Ordinal)
+                    .FirstOrDefault();
+
+                if ((menuB != null) && (menuB.Guid != Guid.Empty))
+                {
+                    short newOrdinalA = menuB.Ordinal;
+                    short newOrdinalB = menuA.Ordinal;
+
+                    menuA.Ordinal= newOrdinalA;
+                    menuA.AddUpdate(dbContext);
+
+                    menuB.Ordinal = newOrdinalB;
+                    menuB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }
@@ -226,19 +235,28 @@ namespace System.Linq
 
         private static void MoveSiteUp(this ApplicationDbContext dbContext, Guid guid)
         {
-            Site? siteA = dbContext.Site.Where(site => site.Guid == guid).FirstOrDefault();
-            if (siteA != null)
-            {
-                Site? siteB = dbContext.Site.Where(site => site.Ordinal == (siteA.Ordinal - 1)).FirstOrDefault();
-                if (siteB != null)
-                {
-                    siteA.Ordinal = siteB.Ordinal;
-                    siteB.Ordinal = Convert.ToInt16(siteB.Ordinal + 1);
+            Site? siteA = dbContext.Site
+                .Where(site => site.Guid == guid)
+                .FirstOrDefault();
 
-                    List<Site> sites = new();
-                    sites.Add(siteA);
-                    sites.Add(siteB);
-                    dbContext.UpdateRange(sites);
+            if ((siteA != null) && (siteA.Guid != Guid.Empty))
+            {
+                Site? siteB = dbContext.Site
+                    .Where(site => site.Ordinal < siteA.Ordinal)
+                    .OrderByDescending(site => site.Ordinal)
+                    .FirstOrDefault();
+
+                if ((siteB != null) && (siteB.Guid != Guid.Empty))
+                {
+                    short newOrdinalA = siteB.Ordinal;
+                    short newOrdinalB = siteA.Ordinal;
+
+                    siteA.Ordinal = newOrdinalA;
+                    siteA.AddUpdate(dbContext);
+
+                    siteB.Ordinal = newOrdinalB;
+                    siteB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }
@@ -246,19 +264,28 @@ namespace System.Linq
 
         private static void MoveUrlUp(this ApplicationDbContext dbContext, Guid guid)
         {
-            Url? urlA = dbContext.Url.Where(url => url.Guid == guid).FirstOrDefault();
-            if (urlA != null)
-            {
-                Url? urlB = dbContext.Url.Where(url => url.Environment == (urlA.Environment - 1)).FirstOrDefault();
-                if (urlB != null)
-                {
-                    urlA.Environment = urlB.Environment;
-                    urlB.Environment++;
+            Url? urlA = dbContext.Url
+                .Where(url => url.Guid == guid)
+                .FirstOrDefault();
 
-                    List<Url> urls = new();
-                    urls.Add(urlA);
-                    urls.Add(urlB);
-                    dbContext.UpdateRange(urls);
+            if ((urlA != null) && (urlA.Guid != Guid.Empty))
+            {
+                Url? urlB = dbContext.Url
+                    .Where(url => url.Environment < urlA.Environment)
+                    .OrderByDescending(url => url.Environment) 
+                    .FirstOrDefault();
+
+                if ((urlB != null) && (urlB.Guid != Guid.Empty))
+                {
+                    EnvironmentTypes newEnvironmentA = urlB.Environment;
+                    EnvironmentTypes newEnvironmentB = urlA.Environment;
+
+                    urlA.Environment = newEnvironmentA;
+                    urlA.AddUpdate(dbContext);
+
+                    urlB.Environment = newEnvironmentB;
+                    urlB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }
@@ -298,19 +325,28 @@ namespace System.Linq
 
         private static void MoveMenuDown(this ApplicationDbContext dbContext, Guid guid)
         {
-            Menu? menuA = dbContext.Menu.Where(menu => menu.Guid == guid).FirstOrDefault();
-            if (menuA != null)
+            Menu? menuA = dbContext.Menu
+                .Where(menu => menu.Guid == guid)
+                .FirstOrDefault();
+
+            if ((menuA != null) && (menuA.Guid != Guid.Empty))
             {
-                Menu? menuB = dbContext.Menu.Where(menu => menu.Ordinal == (menuA.Ordinal + 1)).FirstOrDefault();
+                Menu? menuB = dbContext.Menu
+                    .Where(menu => menu.Ordinal > menuA.Ordinal)
+                    .OrderBy(menu => menu.Ordinal)
+                    .FirstOrDefault();
+
                 if (menuB != null)
                 {
-                    menuA.Ordinal = menuB.Ordinal;
-                    menuB.Ordinal = Convert.ToInt16(menuB.Ordinal - 1);
+                    short newOrdinalA = menuB.Ordinal;
+                    short newOrdinalB = menuA.Ordinal;
 
-                    List<Menu> menus = new();
-                    menus.Add(menuA);
-                    menus.Add(menuB);
-                    dbContext.UpdateRange(menus);
+                    menuA.Ordinal = newOrdinalA;
+                    menuA.AddUpdate(dbContext);
+
+                    menuB.Ordinal = newOrdinalB;
+                    menuB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }
@@ -318,19 +354,28 @@ namespace System.Linq
 
         private static void MoveSiteDown(this ApplicationDbContext dbContext, Guid guid)
         {
-            Site? siteA = dbContext.Site.Where(site => site.Guid == guid).FirstOrDefault();
+            Site? siteA = dbContext.Site
+                .Where(site => site.Guid == guid)
+                .FirstOrDefault();
+
             if (siteA != null)
             {
-                Site? siteB = dbContext.Site.Where(site => site.Ordinal == (siteA.Ordinal + 1)).FirstOrDefault();
-                if (siteB != null)
-                {
-                    siteA.Ordinal = siteB.Ordinal;
-                    siteB.Ordinal = Convert.ToInt16(siteB.Ordinal - 1);
+                Site? siteB = dbContext.Site
+                    .Where(site => site.Ordinal > siteA.Ordinal)
+                    .OrderBy(site => site.Ordinal)
+                    .FirstOrDefault();
 
-                    List<Site> sites = new();
-                    sites.Add(siteA);
-                    sites.Add(siteB);
-                    dbContext.UpdateRange(sites);
+                if ((siteB != null) && (siteB.Guid != Guid.Empty))
+                {
+                    short newOrdinalA = siteB.Ordinal;
+                    short newOrdinalB = siteA.Ordinal;
+
+                    siteA.Ordinal = newOrdinalA;
+                    siteA.AddUpdate(dbContext);
+
+                    siteB.Ordinal = newOrdinalB;
+                    siteB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }
@@ -338,19 +383,28 @@ namespace System.Linq
 
         private static void MoveUrlDown(this ApplicationDbContext dbContext, Guid guid)
         {
-            Url? urlA = dbContext.Url.Where(url => url.Guid == guid).FirstOrDefault();
-            if (urlA != null)
-            {
-                Url? urlB = dbContext.Url.Where(url => url.Environment == (urlA.Environment + 1)).FirstOrDefault();
-                if (urlB != null)
-                {
-                    urlA.Environment = urlB.Environment;
-                    urlB.Environment--;
+            Url? urlA = dbContext.Url
+                .Where(url => url.Guid == guid)
+                .FirstOrDefault();
 
-                    List<Url> urls = new();
-                    urls.Add(urlA);
-                    urls.Add(urlB);
-                    dbContext.UpdateRange(urls);
+            if ((urlA != null) && (urlA.Guid != Guid.Empty))
+            {
+                Url? urlB = dbContext.Url
+                    .Where(url => url.Environment > urlA.Environment)
+                    .OrderBy(url => url.Environment)
+                    .FirstOrDefault();
+
+                if ((urlB != null) && (urlB.Guid != Guid.Empty))
+                {
+                    EnvironmentTypes newEnvironmentA = urlB.Environment;
+                    EnvironmentTypes newEnvironmentB = urlA.Environment;
+
+                    urlA.Environment = newEnvironmentA;
+                    urlA.AddUpdate(dbContext);
+
+                    urlB.Environment = newEnvironmentB;
+                    urlB.AddUpdate(dbContext);
+
                     dbContext.SaveChanges();
                 }
             }

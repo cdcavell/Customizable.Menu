@@ -1,8 +1,20 @@
 [
   {
+    "outputFileName": "wwwroot/lib/Kitzu/css/bootstrap-custom.min.css",
+    "inputFiles": [
+      "wwwroot/lib/Kitzu/css/bootstrap-custom.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/lib/Kitzu/css/main.min.css",
     "inputFiles": [
       "wwwroot/lib/Kitzu/css/main.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/Kitzu/css/colors/main-darkgreen.min.css",
+    "inputFiles": [
+      "wwwroot/lib/Kitzu/css/colors/main-darkgreen.css"
     ]
   },
   {
