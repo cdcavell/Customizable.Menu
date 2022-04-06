@@ -135,13 +135,13 @@ namespace System.Linq
                             if ((urlSite != null) && (urlSite.Guid != Guid.Empty))
                             {
                                 int available = dbContext.AvaliableEnvironments(guid)
-                                    .Count(item => item.Key.Equals(environment));
+                                    .Count(item => item.Key.Equals(((int?)environment)));
 
-                                if (available == 0)
-                                    throw new Exception($"Environment already assigned.");
+                                if (available != 1)
+                                    throw new Exception($"{environment} environment already assigned.");
 
                                 if (!Uri.IsWellFormedUriString(description.Clean(), UriKind.Absolute))
-                                    throw new ArgumentException($"Invalid url.", nameof(description));
+                                    throw new Exception($"Invalid entry for url.");
 
                                 Url url = new();
                                 url.Site = urlSite;
