@@ -120,6 +120,9 @@ namespace System.Linq
                             Site urlSite = dbContext.SiteItem(guid);
                             if ((urlSite != null) && (urlSite.Guid != Guid.Empty))
                             {
+                                if (!Uri.IsWellFormedUriString(description.Clean(), UriKind.Absolute))
+                                    throw new ArgumentException($"Invalid url.", nameof(description));
+
                                 Url url = new();
                                 url.Site = urlSite;
                                 url.Link = description.Clean();

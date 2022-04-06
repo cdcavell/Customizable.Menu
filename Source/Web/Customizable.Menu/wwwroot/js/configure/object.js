@@ -188,8 +188,8 @@
 
             // Add Item
             $('.item-add').click(function () {
-                $('#hiddenGuid').val($(this).data('guid'));
-                $('#hiddenEntityType').val($(this).data('entitytype'));
+                $('#Guid').val($(this).data('guid'));
+                $('#EntityType').val($(this).data('entitytype'));
                 $('#addModalLabel').text('New ' + EntityTypes[$(this).data('entitytype')] + ' Item');
                 $('#addDescriptionText').val('');
 
@@ -227,15 +227,6 @@
                 return false;
             });
 
-            $('#add-close-x').click(function () {
-                $('#addModal').modal('hide');
-                $('#hiddenGuid').val(null);
-                $('#hiddenEntityType').val(null);
-                $('#addDescriptionText').val(null);
-
-                return false;
-            });
-
             $('#addModal').on('shown.bs.modal', function () {
                 $('#addDescriptionText').trigger('focus');
             });
@@ -245,14 +236,14 @@
                 wait('fast');
 
                 let Model = {
-                    Guid: $('#hiddenGuid').val(),
-                    EntityType: $('#hiddenEntityType').val(),
+                    Guid: $('#Guid').val(),
+                    EntityType: $('#EntityType').val(),
                     Description: $('#addDescriptionText').val(),
                     EnvironmentType: $('#addEnvironmentSelect').find(":selected").val()
                 };
 
-                $('#hiddenGuid').val(null);
-                $('#hiddenEntityType').val(null);
+                $('#Guid').val(null);
+                $('#EntityType').val(null);
                 $('#addDescriptionText').val(null);
 
                 ajaxPost(Urls.ItemAdd, VerificationToken, Model)

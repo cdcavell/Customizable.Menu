@@ -59,7 +59,8 @@ namespace Customizable.Menu.Controllers
 
             try
             {
-
+                _dbContext.AddItem(model.EntityType, model.Description.Clean(), model.Guid, model.EnvironmentType);
+                
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(Ok(), options);
             }
