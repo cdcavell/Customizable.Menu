@@ -124,6 +124,12 @@ namespace System.Linq
                             Site urlSite = dbContext.SiteItem(guid);
                             if ((urlSite != null) && (urlSite.Guid != Guid.Empty))
                             {
+                                int available = dbContext.AvaliableEnvironments(guid)
+                                    .Count(item => item.Key.Equals(environment));
+
+                                if (available == 0)
+                                    throw new Exception($"Environment already assigned.");
+
                                 if (!Uri.IsWellFormedUriString(description.Clean(), UriKind.Absolute))
                                     throw new ArgumentException($"Invalid url.", nameof(description));
 
