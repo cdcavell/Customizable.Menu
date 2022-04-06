@@ -106,6 +106,11 @@ namespace System.Linq
                             if (count >= dbContext.MaxMenuOrdinal())
                                 throw new Exception($"Maximum menu items already defined.");
 
+                            int menuAssigned = dbContext.Menu
+                                .Count(menu => menu.Description.Clean().ToLower().Equals(description.Clean().ToLower()));
+                            if (menuAssigned != 0)
+                                throw new Exception($"'{description}' already assigned.");
+
                             ClassLibrary.Data.Models.Menu menu = new();
                             menu.Description = description.Clean();
                             menu.AddUpdate(dbContext);
@@ -114,6 +119,11 @@ namespace System.Linq
                             ClassLibrary.Data.Models.Menu siteMenu = dbContext.MenuItem(guid);
                             if ((siteMenu != null) && (siteMenu.Guid != Guid.Empty))
                             {
+                                int siteAssigned = siteMenu.Sites
+                                    .Count(site => site.Description.Clean().ToLower().Equals(description.Clean().ToLower()));
+                                if (siteAssigned != 0)
+                                    throw new Exception($"'{description}' already assigned.");
+
                                 Site site = new();
                                 site.Menu = siteMenu;
                                 site.Description = description.Clean();
