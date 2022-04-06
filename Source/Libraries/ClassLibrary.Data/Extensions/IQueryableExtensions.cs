@@ -102,6 +102,10 @@ namespace System.Linq
                     switch (entityType)
                     {
                         case EntityTypes.Menu:
+                            short count = Convert.ToInt16(dbContext.Menu.Count());
+                            if (count >= dbContext.MaxMenuOrdinal())
+                                throw new Exception($"Maximum menu items already defined.");
+
                             ClassLibrary.Data.Models.Menu menu = new();
                             menu.Description = description.Clean();
                             menu.AddUpdate(dbContext);
@@ -131,7 +135,7 @@ namespace System.Linq
                             }
                             break;
                         default:
-                            throw new ArgumentException($"Invalid Entity Type: {entityType}");
+                            throw new ArgumentException($"Invalid Entity Type: {entityType}", nameof(entityType));
                     }
 
                     dbContextTransaction.Commit();
@@ -469,6 +473,16 @@ namespace System.Linq
         {
             return dbContext.Configuration
                 .Max(config => config.MaxMenuOrdinal);
+        }
+
+        public static List<KeyValuePair<int, string>> AvaliableEnvironments(this ApplicationDbContext dbContext, Guid guid)
+        {
+            List<KeyValuePair<int, string>> list = Url.GetEnumList();
+            Site site = dbContext.SiteItem(guid);
+            foreach (Url url in site.Urls)
+                list.Remove(list.First(item => item.Key.Equals(url.Environment)));
+
+            return list;
         }
     }
 }
