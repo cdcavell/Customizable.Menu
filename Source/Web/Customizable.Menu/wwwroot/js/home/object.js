@@ -48,7 +48,7 @@
             console.debug('-- BuildSliderContainer');
 
             $.each(sliderItems, function (siteKey, siteValue) {
-                console.debug('-- Card: ' + key + ' Data:');
+                console.debug('-- Card: ' + siteKey + ' Data:');
                 console.debug(siteValue);
 
                 let markup = '<div class="card">';

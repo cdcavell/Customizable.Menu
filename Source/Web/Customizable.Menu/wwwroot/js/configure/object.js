@@ -148,7 +148,7 @@
 
                         markup += '<div class="float-right m-0 mt-2 p-0">';
                         markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '"></i>';
-                        markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '" data-textbox="#textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '"></i>';
+                        markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '" data-textbox="#textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" data-environmenttype="' + urlValue.Environment + '"></i>';
                         markup += '</div>';
 
                         markup += '</div>';
