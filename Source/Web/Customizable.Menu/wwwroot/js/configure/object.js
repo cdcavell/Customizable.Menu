@@ -143,7 +143,14 @@
 
                         markup += '<div class="card">';
                         markup += '<div class="url card-header px-2 py-1" role="tab" id="heading-' + menuKey + '-' + siteKey + '-' + urlKey + '">';
-                        markup += '<h7 class="text-left text-dark mb-0">' + urlValue.Link.trim() + '</h7>';
+                        markup += '<h7 class="text-left text-dark float-left mb-0 mt-2 mr-2">' + EnvironmentTypes[urlValue.Environment] + ':</h7>';
+                        markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" name="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" value="' + urlValue.Link.trim() + '">';
+
+                        markup += '<div class="float-right m-0 mt-2 p-0">';
+                        markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '"></i>';
+                        markup += '<i class="item-update text-dark fas fa-pen mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '" data-textbox="#textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '"></i>';
+                        markup += '</div>';
+
                         markup += '</div>';
                         markup += '</div>';
 
@@ -290,7 +297,8 @@
                 let Model = {
                     Guid: $(this).data('guid'),
                     EntityType: $(this).data('entitytype'),
-                    Description: $($(this).data('textbox')).val()
+                    Description: $($(this).data('textbox')).val(),
+                    EnvironmentType: $(this).data('environmenttype')
                 };
 
                 ajaxPost(Urls.ItemUpdate, VerificationToken, Model)

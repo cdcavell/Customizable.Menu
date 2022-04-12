@@ -44,6 +44,8 @@ namespace Customizable.Menu.Controllers
                 model.Menus = _dbContext.SortedMenuListNoTracking()
                     .Where(menu => menu.Guid == model.Guid).ToList();
 
+                model.Menus.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.LongCount() == 0));
+
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(model, options);
             }

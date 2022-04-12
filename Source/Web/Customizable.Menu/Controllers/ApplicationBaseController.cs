@@ -48,8 +48,11 @@ namespace Customizable.Menu.Controllers
 
         protected void LoadMenu(Guid menuGuid, bool isConfigure)
         {
-            List<ClassLibrary.Data.Models.Menu> menuItems = _dbContext
-                .SortedMenuListNoTracking().ToList();
+            List<ClassLibrary.Data.Models.Menu> menuItems = _dbContext.SortedMenuListNoTracking()
+                .Where(menu => menu.Sites.Any(site => site.Urls.Any(url => !string.IsNullOrEmpty(url.Link))))
+                .ToList();
+
+            menuItems.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.LongCount() == 0));
 
             menuGuid = menuItems.OrderBy(menu => menu.Ordinal)
                 .Where(x => x.Guid == menuGuid)

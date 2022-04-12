@@ -32,10 +32,14 @@ namespace System.Linq
         public static bool HasAnyLinks(this ApplicationDbContext dbContext)
         {
             long count = dbContext.SortedMenuListNoTracking()
-                .Select(menu => menu.Sites).FirstOrDefault()!
-                .Select(site => site.Urls).FirstOrDefault()!
-                .Select(url => url.Link)
-                .Where(link => !string.IsNullOrEmpty(link))
+                .Select(menu => menu.Sites
+                    .Select(site => site.Urls
+                        .Select(url => url.Link)
+                        .Where(link => !string.IsNullOrEmpty(link))
+                    )
+                    .Where(site => site.LongCount() > 0)
+                )
+                .Where(menu => menu.LongCount() > 0)
                 .LongCount();
 
             if (count > 0)
@@ -220,7 +224,7 @@ namespace System.Linq
                             break;
                         case EntityTypes.Url:
                             if (environment.HasValue)
-                                if (!Enum.IsDefined(typeof(EnvironmentTypes), environment))
+                                if (Enum.IsDefined(typeof(EnvironmentTypes), environment))
                                 {
                                     Url url = dbContext.UrlItem(guid);
                                     url.Link = description.Clean();
@@ -496,7 +500,7 @@ namespace System.Linq
             List<KeyValuePair<int, string>> list = Url.GetEnumList();
             Site site = dbContext.SiteItem(guid);
             foreach (Url url in site.Urls)
-                list.Remove(list.First(item => item.Key.Equals(url.Environment)));
+                list.Remove(list.First(item => item.Key.Equals((int?)url.Environment)));
 
             return list;
         }
