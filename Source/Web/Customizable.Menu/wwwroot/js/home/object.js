@@ -66,7 +66,7 @@
 
                     markup += '<div class="card">';
                     markup += '<div class="url-div card-header text-center text-dark px-2 py-1" type="button" role="tab" id="heading-' + siteKey + '-' + urlKey + '"  data-href="' + urlValue.Link + '">';
-                    markup += '<h7 class="mb-0">' + EnvironmentTypes[urlValue.Environment] + '</h7>';
+                    markup += '<h7 class="font-weight-bold mb-0">' + EnvironmentTypes[urlValue.Environment] + '</h7>';
                     markup += '</div>';
                     markup += '</div>';
 
