@@ -195,7 +195,9 @@
             });
 
             // Add Item
-            $('.item-add').click(function () {
+            $('.item-add').click(function (e) {
+                e.preventDefault();
+
                 $('#Guid').val($(this).data('guid'));
                 $('#EntityType').val($(this).data('entitytype'));
                 $('#addModalLabel').text('New ' + EntityTypes[$(this).data('entitytype')] + ' Item');
@@ -239,12 +241,6 @@
                 }
 
                 $('#addModal').modal('show');
-
-                return false;
-            });
-
-            $('#addEnvironmentSelectArrow').click(function () {
-                $('#addEnvironmentSelect').trigger('click').focus();
             });
 
             $('.add-close').click(function () {
