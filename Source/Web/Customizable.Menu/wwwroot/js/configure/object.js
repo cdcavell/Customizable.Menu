@@ -144,8 +144,8 @@
 
                         markup += '<div class="card">';
                         markup += '<div class="url card-header px-2 py-1" role="tab" id="heading-' + menuKey + '-' + siteKey + '-' + urlKey + '">';
-                        markup += '<h7 class="text-left text-dark float-left mb-0 mt-2 mr-2">' + EnvironmentTypes[urlValue.Environment] + ':</h7>';
-                        markup += '<input class="form-control input-sm col-9 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" name="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" value="' + urlValue.Link.trim() + '">';
+                        markup += '<span class="col-1 col-sm-3 font-weight-bold text-right text-dark float-left mb-0 mt-2 mr-2">' + EnvironmentTypes[urlValue.Environment] + '</span>';
+                        markup += '<input class="form-control input-sm col-11 col-sm-7 float-left" type="text" id="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" name="textbox-' + menuKey + '-' + siteKey + '-' + urlKey + '" value="' + urlValue.Link.trim() + '">';
 
                         markup += '<div class="float-right m-0 mt-2 p-0">';
                         markup += '<i class="item-delete text-dark fas fa-trash mx-1 p-1" type="button" data-guid="' + urlValue.Guid + '" data-entitytype="' + EntityTypes.ByValue('Url') + '"></i>';
