@@ -17,6 +17,19 @@ namespace ClassLibrary.Data.Models
         [MaxLength(256, ErrorMessage = "Description value cannot exceed 256 characters.")]
         public string Description { get; set; } = string.Empty;
 
+        [NotMapped]
+        public List<KeyValuePair<int, string>> AvailableEnvironments
+        {
+            get
+            {
+                List<KeyValuePair<int, string>> returnList = Url.GetEnumList();
+                foreach (Url url in this.Urls)
+                    returnList.Remove(new KeyValuePair<int, string>((int)url.Environment, url.Environment.ToString()));
+
+                return returnList;
+            }
+        }
+
         #endregion
 
         #region relationships
@@ -28,11 +41,11 @@ namespace ClassLibrary.Data.Models
         [InverseProperty(nameof(Url.Site))]
         public List<Url> Urls { get; set; } = new();
 
-        #endregion
+    #endregion
 
-        #region instant methods
+    #region instant methods
 
-        public override void AddUpdate(ApplicationDbContext dbContext)
+    public override void AddUpdate(ApplicationDbContext dbContext)
         {
             var dbContextTransaction = dbContext.Database.CurrentTransaction;
             if (dbContextTransaction == null)

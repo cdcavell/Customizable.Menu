@@ -149,5 +149,25 @@ namespace Customizable.Menu.Controllers
                 return ExceptionResult(exception);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GetSite(SiteViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return InvalidModelState();
+
+            try
+            {
+                model.Site = _dbContext.SiteItemNoTracking(model.Guid);
+
+                JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
+                return Json(model, options);
+            }
+            catch (Exception exception)
+            {
+                return ExceptionResult(exception);
+            }
+        }
     }
 }

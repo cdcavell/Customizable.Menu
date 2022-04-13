@@ -6,6 +6,7 @@
         const Urls = {
             GetMenuList: "/Configure/GetMenuList",
             ItemAdd: "/Configure/ItemAdd",
+            ItemAddSite: "/Configure/GetSite",
             ItemDelete: "/Configure/ItemDelete",
             ItemUpdate: "/Configure/ItemUpdate",
             ItemUp: "/Configure/ItemUp",
@@ -203,12 +204,33 @@
                 if (EntityTypes[$(this).data('entitytype')] === 'Url') {
                     $('#addDescriptionLabel').text('Url Link');
                     $('#addEnvironmentSelect').empty();
-                    $.each(EnvironmentTypes, function (key, value) {
-                        if (value.toString().toLowerCase().indexOf('function') === -1) {
-                            let markup = '<option value="' + key + '">' + value + '</option>';
-                            $(markup).appendTo('#addEnvironmentSelect');
+
+                    let Model = {
+                        Guid: $('#Guid').val(),
+                        Site: {
+                            Guid: Guid.Empty,
+                            Ordinal: 0,
+                            Description: 'X',
+                            Menu: {
+                                Guid: Guid.Empty,
+                                Ordinal: 0,
+                                Description: 'X',
+                            }
                         }
-                    });
+                    };
+
+                    ajaxPost(Urls.ItemAddSite, VerificationToken, Model)
+                        .then(function (data) {
+                            $.each(data.Site.AvailableEnvironments, function (key, value) {
+                                let markup = '<option value="' + value.Key + '">' + value.Value + '</option>';
+                                $(markup).appendTo('#addEnvironmentSelect');
+                            });
+                        })
+                        .catch((error) => {
+                            ajaxError(error);
+                            $('#addModal').modal('hide');
+                        });
+
                     $('#addEnvironmentDiv').show();
                 } else {
                     $('#addDescriptionLabel').text('Description');
