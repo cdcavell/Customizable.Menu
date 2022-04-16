@@ -52,7 +52,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ItemAdd(IndexViewModel model)
+        public IActionResult ItemAdd([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -72,7 +72,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ItemDelete(IndexViewModel model)
+        public IActionResult ItemDelete([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -92,7 +92,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ItemUpdate(IndexViewModel model)
+        public IActionResult ItemUpdate([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -112,7 +112,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ItemUp(IndexViewModel model)
+        public IActionResult ItemUp([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -132,7 +132,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ItemDown(IndexViewModel model)
+        public IActionResult ItemDown([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
@@ -152,7 +152,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GetSite(SiteViewModel model)
+        public IActionResult GetSite([Bind(SiteViewModel.BindProperty)] SiteViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();
