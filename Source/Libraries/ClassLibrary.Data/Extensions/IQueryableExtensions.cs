@@ -110,9 +110,12 @@ namespace System.Linq
                             if (count >= dbContext.MaxMenuOrdinal())
                                 throw new Exception($"Maximum menu items already defined.");
 
-                            int menuAssigned = dbContext.Menu
-                                .Count(menu => menu.Description.Clean().ToLower().Equals(description.Clean().ToLower()));
-                            if (menuAssigned != 0)
+                            Menu? exists = dbContext.Menu
+                                .Where(menu => menu.Description.Trim().ToLower().Equals(description.Clean().ToLower()))
+                                .OrderBy(menu => menu.Ordinal)
+                                .FirstOrDefault();
+
+                            if (exists != null)
                                 throw new Exception($"'{description}' already assigned.");
 
                             ClassLibrary.Data.Models.Menu menu = new();
@@ -123,9 +126,11 @@ namespace System.Linq
                             ClassLibrary.Data.Models.Menu siteMenu = dbContext.MenuItem(guid);
                             if ((siteMenu != null) && (siteMenu.Guid != Guid.Empty))
                             {
-                                int siteAssigned = siteMenu.Sites
-                                    .Count(site => site.Description.Clean().ToLower().Equals(description.Clean().ToLower()));
-                                if (siteAssigned != 0)
+                                Site? siteAssigned = siteMenu.Sites
+                                    .Where(site => site.Description.Clean().ToLower().Equals(description.Clean().ToLower()))
+                                    .OrderBy(site => site.Ordinal)
+                                    .FirstOrDefault();
+                                if (siteAssigned != null)
                                     throw new Exception($"'{description}' already assigned.");
 
                                 Site site = new();
@@ -283,6 +288,7 @@ namespace System.Linq
         {
             Menu? menuA = dbContext.Menu
                 .Where(menu => menu.Guid == guid)
+                .OrderBy(menu => menu.Ordinal)
                 .FirstOrDefault();
 
             if ((menuA != null) && (menuA.Guid != Guid.Empty))
@@ -312,6 +318,7 @@ namespace System.Linq
         {
             Site? siteA = dbContext.Site
                 .Where(site => site.Guid == guid)
+                .OrderBy(site => site.Ordinal)
                 .FirstOrDefault();
 
             if ((siteA != null) && (siteA.Guid != Guid.Empty))
@@ -342,6 +349,7 @@ namespace System.Linq
         {
             Url? urlA = dbContext.Url
                 .Where(url => url.Guid == guid)
+                .OrderBy(url => url.Environment)
                 .FirstOrDefault();
 
             if ((urlA != null) && (urlA.Guid != Guid.Empty))
@@ -404,6 +412,7 @@ namespace System.Linq
         {
             Menu? menuA = dbContext.Menu
                 .Where(menu => menu.Guid == guid)
+                .OrderBy(menu => menu.Ordinal)
                 .FirstOrDefault();
 
             if ((menuA != null) && (menuA.Guid != Guid.Empty))
@@ -433,6 +442,7 @@ namespace System.Linq
         {
             Site? siteA = dbContext.Site
                 .Where(site => site.Guid == guid)
+                .OrderBy(site => site.Ordinal)
                 .FirstOrDefault();
 
             if (siteA != null)
@@ -463,6 +473,7 @@ namespace System.Linq
         {
             Url? urlA = dbContext.Url
                 .Where(url => url.Guid == guid)
+                .OrderBy(url => url.Environment)
                 .FirstOrDefault();
 
             if ((urlA != null) && (urlA.Guid != Guid.Empty))

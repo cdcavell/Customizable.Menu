@@ -34,7 +34,7 @@ namespace Customizable.Menu.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GetSiteList(IndexViewModel model)
+        public IActionResult GetSiteList([Bind(IndexViewModel.BindProperty)] IndexViewModel model)
         {
             if (!ModelState.IsValid)
                 return InvalidModelState();

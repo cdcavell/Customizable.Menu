@@ -38,7 +38,7 @@ namespace Customizable.Menu.Controllers
             Guid menuId = Guid.Empty;
             try
             {
-                menuId = Guid.Parse(cookie.GetValue("session", "menuId"));
+                menuId = Guid.Parse(cookie.GetValue("session", "menuGuid"));
             }
             catch (ArgumentNullException) { }
             catch (FormatException) { }

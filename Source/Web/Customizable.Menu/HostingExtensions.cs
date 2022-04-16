@@ -72,11 +72,13 @@ namespace Customizable.Menu
             foreach (string message in ApplicationDbContext.Migrate(app))
                 Log.Information(message);
 
+            ApplicationDbBackup.Run(app);
+
             app.UseRouting();
             app.UseStaticFiles();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
+                pattern: "{controller=Home}/{action=Index}/{guid?}"
             );
 
             return app;
