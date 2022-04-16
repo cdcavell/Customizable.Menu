@@ -54,6 +54,7 @@ namespace System.Linq
                 .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
                 .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
                 .Where(menu => menu.Guid == guid)
+                .OrderBy(menu => menu.Ordinal)
                 .FirstOrDefault() ?? new();
         }
 
@@ -63,6 +64,7 @@ namespace System.Linq
                 .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
                 .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
                 .Where(menu => menu.Guid == guid)
+                .OrderBy(menu => menu.Ordinal)
                 .FirstOrDefault() ?? new();
         }
 
@@ -71,6 +73,7 @@ namespace System.Linq
             return dbContext.Site
                 .Include(site => site.Urls.OrderBy(url => url.Environment))
                 .Where(site => site.Guid == guid)
+                .OrderBy(site => site.Ordinal)
                 .FirstOrDefault() ?? new();
         }
 
@@ -79,6 +82,7 @@ namespace System.Linq
             return dbContext.Site.AsNoTrackingWithIdentityResolution()
                 .Include(site => site.Urls.OrderBy(url => url.Environment))
                 .Where(site => site.Guid == guid)
+                .OrderBy(site => site.Ordinal)
                 .FirstOrDefault() ?? new();
         }
 
@@ -86,6 +90,7 @@ namespace System.Linq
         {
             return dbContext.Url
                 .Where(url => url.Guid == guid)
+                .OrderBy(url => url.Environment)
                 .FirstOrDefault() ?? new();
         }
 
@@ -93,6 +98,7 @@ namespace System.Linq
         {
             return dbContext.Url.AsNoTrackingWithIdentityResolution()
                 .Where(url => url.Guid == guid)
+                .OrderBy(url => url.Environment)
                 .FirstOrDefault() ?? new();
         }
 
