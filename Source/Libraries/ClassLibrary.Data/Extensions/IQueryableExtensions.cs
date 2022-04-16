@@ -134,6 +134,7 @@ namespace System.Linq
                                     throw new Exception($"'{description}' already assigned.");
 
                                 Site site = new();
+                                site.MenuGuid = guid;
                                 site.Menu = siteMenu;
                                 site.Description = description.Clean();
                                 site.AddUpdate(dbContext);
@@ -153,6 +154,7 @@ namespace System.Linq
                                     throw new Exception($"Invalid entry for url.");
 
                                 Url url = new();
+                                url.SiteGuid = guid;
                                 url.Site = urlSite;
                                 url.Link = description.Clean();
                                 url.Environment = environment ?? throw new ArgumentNullException(nameof(environment));

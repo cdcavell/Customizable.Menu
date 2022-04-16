@@ -9,7 +9,7 @@ namespace ClassLibrary.Data.Models
         #region properties
 
         public byte[] EncryptionKey { get; set; } = AESGCM.NewKey();
-        public short MaxMenuOrdinal { get; set; } = 5;
+        public short MaxMenuOrdinal { get; set; } = 25;
 
         #endregion
     }

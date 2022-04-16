@@ -41,11 +41,11 @@ namespace ClassLibrary.Data.Models
         [InverseProperty(nameof(Url.Site))]
         public List<Url> Urls { get; set; } = new();
 
-    #endregion
+        #endregion
 
-    #region instant methods
+        #region instant methods
 
-    public override void AddUpdate(ApplicationDbContext dbContext)
+        public override void AddUpdate(ApplicationDbContext dbContext)
         {
             var dbContextTransaction = dbContext.Database.CurrentTransaction;
             if (dbContextTransaction == null)
