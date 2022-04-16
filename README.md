@@ -7,10 +7,6 @@ _If you are cloning this repository, please enter commands as follows:_
 
 ```
 $ git clone https://github.com/cdcavell/Customizable.Menu.git
-
-$ cd Customizable.Menu
-
-$ git flow init -d
 ```
 
 <hr />
