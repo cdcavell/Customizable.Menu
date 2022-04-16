@@ -1,5 +1,5 @@
 ﻿# Customizable.Menu
-## This is a project I developed to help in keeping track of the multitude of url's I use on any given day.
+## This is a .Net 6 project I developed to help in keeping track of the multitude of url's I use on any given day.
 
 <hr />
 
