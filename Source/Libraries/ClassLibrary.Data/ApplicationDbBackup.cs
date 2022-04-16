@@ -33,6 +33,8 @@ namespace ClassLibrary.Data
                             backupConnection.Open();
                             sourceConnection.Open();
                             sourceConnection.BackupDatabase(backupConnection, "main", "main");
+                            sourceConnection.Close();
+                            backupConnection.Close();
                         }
 
                         DirectoryInfo info = new DirectoryInfo(backupDirectory);
