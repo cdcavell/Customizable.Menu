@@ -52,7 +52,7 @@ namespace Customizable.Menu.Controllers
                 .Where(menu => menu.Sites.Any(site => site.Urls.Any(url => !string.IsNullOrEmpty(url.Link))))
                 .ToList();
 
-            menuItems.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.Count == 0));
+            //menuItems.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.Count == 0));
 
             menuGuid = menuItems.OrderBy(menu => menu.Ordinal)
                 .Where(x => x.Guid == menuGuid)
