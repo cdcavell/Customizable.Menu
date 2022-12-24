@@ -41,10 +41,10 @@ namespace Customizable.Menu.Controllers
 
             try
             {
-                model.Menus = _dbContext.SortedMenuListNoTracking()
+                model.Menus = _dbContext.SortedMenuList()
                     .Where(menu => menu.Guid == model.Guid).ToList();
 
-                model.Menus.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.LongCount() == 0));
+                model.Menus.ForEach(menu => menu.Sites.RemoveAll(site => site.Urls.Count == 0));
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(model, options);

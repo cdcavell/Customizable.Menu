@@ -23,23 +23,17 @@ namespace System.Linq
                 .OrderBy(menu => menu.Ordinal);
         }
 
-        public static IQueryable<Menu> SortedMenuListNoTracking(this ApplicationDbContext dbContext)
-        {
-            return dbContext.SortedMenuList()
-                .AsNoTrackingWithIdentityResolution();
-        }
-
         public static bool HasAnyLinks(this ApplicationDbContext dbContext)
         {
-            long count = dbContext.SortedMenuListNoTracking()
+            long count = dbContext.SortedMenuList()
                 .Select(menu => menu.Sites
                     .Select(site => site.Urls
                         .Select(url => url.Link)
                         .Where(link => !string.IsNullOrEmpty(link))
                     )
-                    .Where(site => site.LongCount() > 0)
+                    .Where(site => site.Any())
                 )
-                .Where(menu => menu.LongCount() > 0)
+                .Where(menu => menu.Any())
                 .LongCount();
 
             if (count > 0)
@@ -58,16 +52,6 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
-        public static Menu MenuItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
-        {
-            return dbContext.Menu.AsNoTrackingWithIdentityResolution()
-                .Include(menu => menu.Sites.OrderBy(site => site.Ordinal))
-                .ThenInclude(site => site.Urls.OrderBy(url => url.Environment))
-                .Where(menu => menu.Guid == guid)
-                .OrderBy(menu => menu.Ordinal)
-                .FirstOrDefault() ?? new();
-        }
-
         public static Site SiteItem(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Site
@@ -77,26 +61,9 @@ namespace System.Linq
                 .FirstOrDefault() ?? new();
         }
 
-        public static Site SiteItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
-        {
-            return dbContext.Site.AsNoTrackingWithIdentityResolution()
-                .Include(site => site.Urls.OrderBy(url => url.Environment))
-                .Where(site => site.Guid == guid)
-                .OrderBy(site => site.Ordinal)
-                .FirstOrDefault() ?? new();
-        }
-
         public static Url UrlItem(this ApplicationDbContext dbContext, Guid guid)
         {
             return dbContext.Url
-                .Where(url => url.Guid == guid)
-                .OrderBy(url => url.Environment)
-                .FirstOrDefault() ?? new();
-        }
-
-        public static Url UrlItemNoTracking(this ApplicationDbContext dbContext, Guid guid)
-        {
-            return dbContext.Url.AsNoTrackingWithIdentityResolution()
                 .Where(url => url.Guid == guid)
                 .OrderBy(url => url.Environment)
                 .FirstOrDefault() ?? new();
@@ -124,8 +91,10 @@ namespace System.Linq
                             if (exists != null)
                                 throw new Exception($"'{description}' already assigned.");
 
-                            ClassLibrary.Data.Models.Menu menu = new();
-                            menu.Description = description.Clean();
+                            ClassLibrary.Data.Models.Menu menu = new()
+                            {
+                                Description = description.Clean()
+                            };
                             menu.AddUpdate(dbContext);
                             break;
                         case EntityTypes.Site:
@@ -139,10 +108,12 @@ namespace System.Linq
                                 if (siteAssigned != null)
                                     throw new Exception($"'{description}' already assigned.");
 
-                                Site site = new();
-                                site.MenuGuid = guid;
-                                site.Menu = siteMenu;
-                                site.Description = description.Clean();
+                                Site site = new()
+                                {
+                                    MenuGuid = guid,
+                                    Menu = siteMenu,
+                                    Description = description.Clean()
+                                };
                                 site.AddUpdate(dbContext);
                             }
                             break;
@@ -159,11 +130,13 @@ namespace System.Linq
                                 if (!Uri.IsWellFormedUriString(description.Clean(), UriKind.Absolute))
                                     throw new Exception($"Invalid entry for url.");
 
-                                Url url = new();
-                                url.SiteGuid = guid;
-                                url.Site = urlSite;
-                                url.Link = description.Clean();
-                                url.Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+                                Url url = new()
+                                {
+                                    SiteGuid = guid,
+                                    Site = urlSite,
+                                    Link = description.Clean(),
+                                    Environment = environment ?? throw new ArgumentNullException(nameof(environment))
+                                };
                                 url.AddUpdate(dbContext);
                             }
                             break;

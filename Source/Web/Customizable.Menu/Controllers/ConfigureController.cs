@@ -37,9 +37,11 @@ namespace Customizable.Menu.Controllers
 
             try
             {
-                IndexViewModel model = new();
-                model.Menus = _dbContext.SortedMenuListNoTracking().ToList();
-                model.MaxMenuOrdinal = _dbContext.MaxMenuOrdinal();
+                IndexViewModel model = new()
+                {
+                    Menus = _dbContext.SortedMenuList().ToList(),
+                    MaxMenuOrdinal = _dbContext.MaxMenuOrdinal()
+                };
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles  };
                 return Json(model, options) ;
@@ -159,7 +161,7 @@ namespace Customizable.Menu.Controllers
 
             try
             {
-                model.Site = _dbContext.SiteItemNoTracking(model.Guid);
+                model.Site = _dbContext.SiteItem(model.Guid);
 
                 JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.IgnoreCycles };
                 return Json(model, options);
