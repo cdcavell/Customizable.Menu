@@ -46,7 +46,7 @@ namespace Customizable.Menu.Filters
                 csp += "frame-ancestors 'self'; ";
                 csp += "frame-src 'self'; ";
                 csp += "font-src 'self' https://fonts.gstatic.com data:; ";
-                csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
+//                csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' https://fonts.googleapis.com 'nonce-" + _StyleNonce + "'; ";
                 csp += "script-src 'strict-dynamic' 'unsafe-eval' 'nonce-" + _ScriptNonce + "'; ";
