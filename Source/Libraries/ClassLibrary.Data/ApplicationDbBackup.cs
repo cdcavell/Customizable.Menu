@@ -37,7 +37,7 @@ namespace ClassLibrary.Data
                             backupConnection.Close();
                         }
 
-                        DirectoryInfo info = new DirectoryInfo(backupDirectory);
+                        DirectoryInfo info = new(backupDirectory);
                         FileInfo[] files = info.GetFiles().OrderByDescending(p => p.CreationTime).Skip(3).ToArray();
                         foreach (FileInfo file in files)
                             file.Delete();
