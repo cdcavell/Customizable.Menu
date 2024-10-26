@@ -17,7 +17,7 @@
 
         let MaxMenuOrdinal = 0;
 
-        $(document).ready(function () {
+        $(function() {
             wait();
 
             let obj = JSON.parse(sessionStorage.getItem('ConfigureOpenCard'));
@@ -170,12 +170,12 @@
 
             });
 
-            $('.input-sm').click(function () {
+            $('.input-sm').on('click', function () {
                 return false;
             });
 
             // Slide Item
-            $('.item-slide').click(function () {
+            $('.item-slide').on('click', function () {
                 let value = $(this).data('slide').trim();
                 let key = value.substring(1, value.length);
 
@@ -195,7 +195,7 @@
             });
 
             // Add Item
-            $('.item-add').click(function (e) {
+            $('.item-add').on('click', function (e) {
                 e.preventDefault();
 
                 $('#Guid').val($(this).data('guid'));
@@ -243,7 +243,7 @@
                 $('#addModal').modal('show');
             });
 
-            $('.add-close').click(function () {
+            $('.add-close').on('click', function () {
                 $('#addModal').modal('hide');
                 $('#hiddenGuid').val(null);
                 $('#hiddenEntityType').val(null);
@@ -256,7 +256,7 @@
                 $('#addDescriptionText').trigger('focus');
             });
 
-            $('#add-save').click(function () {
+            $('#add-save').on('click', function () {
                 $('#addModal').modal('hide');
                 wait('fast');
 
@@ -284,7 +284,7 @@
             });
 
             // Delete Item
-            $('.item-delete').click(function () {
+            $('.item-delete').on('click', function () {
                 wait('fast');
                 let confirmMessage = 'Are your sure you want to continue? All defined links under this item will be deleted as well.';
 
@@ -310,7 +310,7 @@
             });
 
             // Update Item
-            $('.item-update').click(function () {
+            $('.item-update').on('click', function () {
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
@@ -332,7 +332,7 @@
             });
 
             // Move Item Up
-            $('.item-up').click(function () {
+            $('.item-up').on('click', function () {
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),
@@ -352,7 +352,7 @@
             });
 
             // Move Item Down
-            $('.item-down').click(function () {
+            $('.item-down').on('click', function () {
                 wait('fast');
                 let Model = {
                     Guid: $(this).data('guid'),

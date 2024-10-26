@@ -29,13 +29,13 @@ namespace Customizable.Menu.Filters
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Type-Options"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                    context.HttpContext.Response.Headers.Append("X-Content-Type-Options", "nosniff");
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Frame-Options"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                    context.HttpContext.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
@@ -56,19 +56,19 @@ namespace Customizable.Menu.Filters
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("Content-Security-Policy", csp);
+                    context.HttpContext.Response.Headers.Append("Content-Security-Policy", csp);
                 }
                 // and once again for IE
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Security-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Content-Security-Policy", csp);
+                    context.HttpContext.Response.Headers.Append("X-Content-Security-Policy", csp);
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
                 var referrer_policy = "no-referrer";
                 if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("Referrer-Policy", referrer_policy);
+                    context.HttpContext.Response.Headers.Append("Referrer-Policy", referrer_policy);
                 }
 
                 // Additional security headers //
@@ -77,13 +77,13 @@ namespace Customizable.Menu.Filters
                 // The X-Xss-Protection header will cause most modern browsers to stop loading the page when a cross-site scripting attack is identified. 
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Xss-Protection"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+                    context.HttpContext.Response.Headers.Append("X-Xss-Protection", "1; mode=block");
                 }
 
                 // Disable the possibility of Flash making cross-site requests. (Should not be using Flash, this is a safty catch)
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", "none");
+                    context.HttpContext.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", "none");
                 }
 
                 // Permissions-Policy (https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/)
@@ -99,12 +99,12 @@ namespace Customizable.Menu.Filters
 
                 if (!context.HttpContext.Response.Headers.ContainsKey("Permissions-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("Permissions-Policy", pp);
+                    context.HttpContext.Response.Headers.Append("Permissions-Policy", pp);
                 }
 
                 if (!context.HttpContext.Response.Headers.ContainsKey("Last-Modified"))
                 {
-                    context.HttpContext.Response.Headers.Add(
+                    context.HttpContext.Response.Headers.Append(
                         "Last-Modified",
                         WebUtility.UrlEncode(_AppSettings.LastModifiedDateTime.ToString("ddd, dd MM yyyy HH:mm:ss 'GMT'"))
                     );
@@ -112,7 +112,7 @@ namespace Customizable.Menu.Filters
 
                 if (!context.HttpContext.Response.Headers.ContainsKey("Cache-Control"))
                 {
-                    context.HttpContext.Response.Headers.Add("Cache-Control", "public, max-age=0, must-revalidate");
+                    context.HttpContext.Response.Headers.Append("Cache-Control", "private, max-age=0, must-revalidate");
                 }
             }
         }

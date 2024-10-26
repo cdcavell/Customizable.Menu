@@ -82,7 +82,7 @@
     //Apply stles
     id.css(initStyles);
 
-    modal.click(function(event) {
+    modal.on('click', function(event) {
       event.preventDefault();
       if (href == idConc) {
         if (id.hasClass(settings.modalTarget + '-off')) {
@@ -102,7 +102,7 @@
 
 
 
-    closeBt.click(function(event) {
+    closeBt.on('click', function(event) {
       event.preventDefault();
 
       settings.beforeClose(); //beforeClose

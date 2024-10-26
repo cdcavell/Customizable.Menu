@@ -7,7 +7,7 @@
             GetSiteList: "/Home/GetSiteList"
         }
 
-        $(document).ready(function () {
+        $(function() {
             GetSiteList();
         });
 
@@ -80,14 +80,14 @@
                 $(markup).appendTo('#sliderContainer');
             });
 
-            $(".site-div").click(function () {
+            $(".site-div").on('click', function () {
                 let result = $(this).attr("id").indexOf('-');
                 result = $(this).attr("id").substring(result);
                 $('#collapse' + result).slideToggle(1000);
                 return false;
             });
 
-            $(".url-div").click(function () {
+            $(".url-div").on('click', function () {
                 let result = $(this).data("href");
                 window.location = result;
             });

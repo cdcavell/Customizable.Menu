@@ -14,24 +14,17 @@ namespace ClassLibrary.Mvc.Controllers
 {
     [Controller]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-    public abstract partial class WebBaseController<T> : Controller where T : WebBaseController<T>
+    public abstract partial class WebBaseController<T>(
+        ILogger<T> logger
+        ) : Controller where T : WebBaseController<T>
     {
-        protected readonly ILogger _logger;
+        protected readonly ILogger _logger = logger;
 
-        protected string _invalidModelState;
-
-        protected WebBaseController(
-            ILogger<T> logger
-        )
-        {
-            _logger = logger;
-            _invalidModelState = string.Empty;
-        }
+        protected string _invalidModelState = string.Empty;
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+            ArgumentNullException.ThrowIfNull(context);
 
             base.OnActionExecuting(context);
         }
@@ -115,7 +108,7 @@ namespace ClassLibrary.Mvc.Controllers
         public virtual IActionResult Error(int id)
         {
             if (id == 0)
-                if (Request.Method.ToLower() == "post")
+                if (Request.Method.Equals("post", StringComparison.CurrentCultureIgnoreCase))
                     _ = int.TryParse((RouteData?.Values["id"]?.ToString()) ?? "0", out id);
 
             var vm = new ErrorViewModel(id);
